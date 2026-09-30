@@ -124,7 +124,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Only for YouTube Shorts!",
         "err_tiktok": "❌ Only for TikTok!",
         "err_insta": "❌ Only for Instagram!",
-        "limit_exceeded": "⚠️️ **Limit Exceeded!**",
+        "limit_exceeded": "⚠ **Limit Exceeded!**",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -147,7 +147,7 @@ TRANSLATIONS = {
         "admin_prompt": "👑 **خاص للمشرف:** أرسل الروابط:",
         "payment_success": "🎉 نجح الدفع!",
         "fast_payment_success": "⚡ تم تفعيل التنزيل السريع!",
-        "no_rights": "⚠️ ليس لديك حقوق نشطة.",
+        "no_rights": "⚠️️ ليس لديك حقوق نشطة.",
         "expired": "⏳ انتهت صلاحية حقوقك.",
         "err_uzun": "❌ لفيديوهات يوتيوب الطويلة فقط!",
         "err_shorts": "❌ ليوتيوب شورتس فقط!",
@@ -436,14 +436,6 @@ def callback_handler(call):
         user_states[user_id] = f"waiting_for_{p_key}"
         bot.answer_callback_query(call.id)
         m = InlineKeyboardMarkup()
-        m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text=profile_text, reply_markup=m, parse_mode="Markdown")
-        return
-
-    if data == "open_language_menu":
-        bot.answer_callback_query(call.id)
-        m = InlineKeyboardMarkup(row_width=1)
-        m.add(*(InlineKeyboardButton(name, callback_data=f"set_lang_{code}") for name, code in ALL_LANGUAGES))
         m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
         bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "lang_select"), reply_markup=m, parse_mode="Markdown")
         return
