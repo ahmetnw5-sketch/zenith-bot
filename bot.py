@@ -15,9 +15,6 @@ unlocked_platforms = {}
 user_languages = {} 
 pending_links = {}  
 fast_downloads = {} 
-wheel_rights = {}
-user_discounts = {}
-first_time_users = set()
 
 daily_winners = {}  
 last_reward_date = ""
@@ -32,13 +29,12 @@ ALL_LANGUAGES = [
 
 TRANSLATIONS = {
     "tr": {
-        "welcome": "✨🚀 **Yoğooov! Hoş geldin NEYOM Krallığına!** 🔥💎\n\n*Botun motorları son sürat çalışıyor, indirmeye hazır ol!* 👇🤖",
+        "welcome": "🤖 **Video İndirme Botuna Hoş Geldin!**\n\nİşlem yapmak istediğin seçeneğe tıkla:",
         "admin_active": "\n\n👑 *Admin Paneli Aktif!*",
-        "btn_uzun": "🎬 YouTube Uzun",
-        "btn_shorts": "📱 YouTube Shorts",
-        "btn_tiktok": "🎵 TikTok İndir",
-        "btn_insta": "📸 Instagram Reels",
-        "btn_wheel": "🎡 Şans Çarkını Çevir (Günde 3 Hak)",
+        "btn_uzun": "🎬 YouTube Uzun (150 Yıldız) - 5200 Hak",
+        "btn_shorts": "📱 YouTube Shorts (150 Yıldız) - 5200 Hak",
+        "btn_tiktok": "🎵 TikTok İndir (200 Yıldız) - 5200 Hak",
+        "btn_insta": "📸 Instagram Reels (180 Yıldız) - 5200 Hak",
         "btn_profile": "👤 Profilim / Kalan Haklarım",
         "btn_lang": "🌐 Dil Seç / Language",
         "lang_select": "🌐 **Lütfen kullanmak istediğin dili seç:**",
@@ -57,13 +53,12 @@ TRANSLATIONS = {
         "start_fallback": "Lütfen `/start` yazıp menüden seçim yap."
     },
     "ku": {
-        "welcome": "✨🚀 **Bi xêr hatî Qraliyeta NEYOM!** 🔥💎",
+        "welcome": "🤖 **Bi xêr hatî Botê Daxistinê!**",
         "admin_active": "\n\n👑 *Panela Admin Çalak e!*",
         "btn_uzun": "🎬 Vîdyoya Dirêj a YouTube",
         "btn_shorts": "📱 YouTube Shorts",
         "btn_tiktok": "🎵 Daxistina TikTok",
         "btn_insta": "📸 Instagram Reels",
-        "btn_wheel": "🎡 Çerxa Bextê Bivirîne",
         "btn_profile": "👤 Profîla Min / Mafên Mayî",
         "btn_lang": "🌐 Ziman / Dil",
         "lang_select": "🌐 **Ji kerema xwe zimanê xwe hilbijêre:**",
@@ -82,13 +77,12 @@ TRANSLATIONS = {
         "start_fallback": "Ji kerema xwe `/start` binivîse."
     },
     "en": {
-        "welcome": "✨🚀 **Welcome to NEYOM Kingdom!** 🔥💎",
+        "welcome": "🤖 **Welcome to Video Downloader Bot!**",
         "admin_active": "\n\n👑 *Admin Panel Active!*",
         "btn_uzun": "🎬 YouTube Long Video",
         "btn_shorts": "📱 YouTube Shorts",
         "btn_tiktok": "🎵 TikTok Video",
         "btn_insta": "📸 Instagram Reels",
-        "btn_wheel": "🎡 Spin the Lucky Wheel",
         "btn_profile": "👤 Profile / Remaining Rights",
         "btn_lang": "🌐 Language",
         "lang_select": "🌐 **Please select your language:**",
@@ -107,13 +101,12 @@ TRANSLATIONS = {
         "start_fallback": "Please type `/start`."
     },
     "ar": {
-        "welcome": "✨🚀 **مرحباً بك في مملكة NEYOM!** 🔥💎",
+        "welcome": "🤖 **مرحباً بك في بوت التحميل!**",
         "admin_active": "\n\n👑 *لوحة المشرف نشطة!*",
         "btn_uzun": "🎬 فيديو يوتيوب طويل",
         "btn_shorts": "📱 يوتيوب شورتس",
         "btn_tiktok": "🎵 تيك توك",
         "btn_insta": "📸 إنستغرام ريلز",
-        "btn_wheel": "🎡 أدار عجلة الحظ",
         "btn_profile": "👤 ملفي الشخصي / الحقوق المتبقية",
         "btn_lang": "🌐 اللغة",
         "lang_select": "🌐 **يرجى اختيار لغتك:**",
@@ -132,13 +125,12 @@ TRANSLATIONS = {
         "start_fallback": "يرجى كتابة `/start`."
     },
     "tk": {
-        "welcome": "✨🚀 **NEYOM Patyşalygyna Hoş geldiňiz!** 🔥💎",
+        "welcome": "🎨 **Wideo ýükleýji bota hoş geldiňiz!**",
         "admin_active": "\n\n👑 *Admin paneli işjeň!*",
         "btn_uzun": "🎬 YouTube Uzyn Wideo",
         "btn_shorts": "📱 YouTube Shorts",
         "btn_tiktok": "🎵 TikTok Wideo",
         "btn_insta": "Instagram Reels",
-        "btn_wheel": "🎡 Bagt Çarhyny Aýla",
         "btn_profile": "👤 Profilim / Galan Haklarym",
         "btn_lang": "🌐 Dil",
         "lang_select": "🌐 **Dil saýlaň:**",
@@ -146,7 +138,7 @@ TRANSLATIONS = {
         "admin_prompt": "👑 **Admin:** Salgylary ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
         "fast_payment_success": "⚡ Çalt ýükleme işjeňleşdirildi!",
-        "no_rights": "⚠ Ygtyýaryňyz ýok.",
+        "no_rights": "⚠️ Ygtyýaryňyz ýok.",
         "expired": "⏳ Wagtyňyz gutardy.",
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
@@ -164,26 +156,12 @@ def get_text(user_id, key):
     return TRANSLATIONS[lang].get(key, TRANSLATIONS["tr"].get(key, ""))
 
 def get_main_keyboard(user_id):
-    disc = user_discounts.get(user_id, 0)
-    base_prices = {"uzun": 150, "shorts": 150, "tiktok": 200, "insta": 180}
-    
-    def calc_price(p_key):
-        p = base_prices[p_key]
-        if disc == 100:
-            return "0 Yıldız (ÜCRETSİZ 🎁)"
-        elif disc > 0:
-            discounted = int(p * (100 - disc) / 100)
-            return f"%{disc} İndirimli ({discounted} Yıldız)"
-        else:
-            return f"({p} Yıldız)"
-
     m = InlineKeyboardMarkup(row_width=1)
     m.add(
-        InlineKeyboardButton(f"{get_text(user_id, 'btn_uzun')} - {calc_price('uzun')}", callback_data="unlock_yt_uzun"),
-        InlineKeyboardButton(f"{get_text(user_id, 'btn_shorts')} - {calc_price('shorts')}", callback_data="unlock_yt_shorts"),
-        InlineKeyboardButton(f"{get_text(user_id, 'btn_tiktok')} - {calc_price('tiktok')}", callback_data="unlock_tiktok"),
-        InlineKeyboardButton(f"{get_text(user_id, 'btn_insta')} - {calc_price('insta')}", callback_data="unlock_insta"),
-        InlineKeyboardButton(get_text(user_id, "btn_wheel"), callback_data="open_lucky_wheel"),
+        InlineKeyboardButton(get_text(user_id, "btn_uzun"), callback_data="unlock_yt_uzun"),
+        InlineKeyboardButton(get_text(user_id, "btn_shorts"), callback_data="unlock_yt_shorts"),
+        InlineKeyboardButton(get_text(user_id, "btn_tiktok"), callback_data="unlock_tiktok"),
+        InlineKeyboardButton(get_text(user_id, "btn_insta"), callback_data="unlock_insta"),
         InlineKeyboardButton(get_text(user_id, "btn_profile"), callback_data="open_profile"),
         InlineKeyboardButton(get_text(user_id, "btn_lang"), callback_data="open_language_menu")
     )
@@ -197,22 +175,8 @@ def send_welcome(message):
     user_states[user_id] = None
     
     now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
-    current_hour = now_tr.hour
-    
-    try:
-        if user_id not in first_time_users:
-            first_time_users.add(user_id)
-            if os.path.exists("hosgeldin.ogg"):
-                with open("hosgeldin.ogg", "rb") as voice_file:
-                    bot.send_voice(chat_id, voice_file, caption="👑 Hoş geldin kral!")
-        elif 8 <= current_hour < 10:
-            if os.path.exists("gunaydin.ogg"):
-                with open("gunaydin.ogg", "rb") as voice_file:
-                    bot.send_voice(chat_id, voice_file, caption="☀️ Günaydın reis nasılsın iyisin?")
-    except Exception:
-        pass
-
     current_date_str = now_tr.strftime("%Y-%m-%d")
+    current_hour = now_tr.hour
     current_minute = now_tr.minute
 
     if last_reward_date != current_date_str:
@@ -259,68 +223,6 @@ def callback_handler(call):
     chat_id = call.message.chat.id
     data = call.data
     
-    if data == "open_lucky_wheel":
-        bot.answer_callback_query(call.id)
-        now_date = (datetime.datetime.utcnow() + datetime.timedelta(hours=3)).strftime("%Y-%m-%d")
-        
-        if user_id not in wheel_rights:
-            wheel_rights[user_id] = {"date": now_date, "count": 3}
-        elif wheel_rights[user_id]["date"] != now_date:
-            wheel_rights[user_id] = {"date": now_date, "count": 3}
-            
-        kalan_hak = wheel_rights[user_id]["count"]
-        
-        wheel_text = (
-            f"🎡 **Şans Çarkı Odasına Hoş Geldin NEYOM!**\n\n"
-            f"Bugünkü kalan çevirme hakkın: `{kalan_hak} / 3`\n\n"
-            f"Çarkı çevirerek **%50, %80, %89, %98, %99 veya %100** indirim kazanabilirsin!\n"
-            f"*(Eğer %100 gelirse seçtiğin paket tamamen ücretsiz / 0 Yıldız olur!)*"
-        )
-        
-        m = InlineKeyboardMarkup(row_width=1)
-        if kalan_hak > 0:
-            m.add(InlineKeyboardButton("🎲 Çarkı Hemen Çevir!", callback_data="spin_wheel_action"))
-        m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
-        
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=wheel_text, reply_markup=m, parse_mode="Markdown")
-        return
-
-    if data == "spin_wheel_action":
-        now_date = (datetime.datetime.utcnow() + datetime.timedelta(hours=3)).strftime("%Y-%m-%d")
-        if user_id not in wheel_rights or wheel_rights[user_id]["date"] != now_date:
-            wheel_rights[user_id] = {"date": now_date, "count": 3}
-            
-        if wheel_rights[user_id]["count"] <= 0:
-            bot.answer_callback_query(call.id, "⚠️ Bugünkü çevirme hakkın bitti!", show_alert=True)
-            return
-            
-        wheel_rights[user_id]["count"] -= 1
-        
-        try:
-            bot.send_dice(chat_id, emoji="🎯")
-        except:
-            pass
-            
-        discounts = [50, 80, 89, 98, 99, 100]
-        weights = [40, 25, 15, 10, 8, 2]
-        chosen_discount = random.choices(discounts, weights=weights, k=1)[0]
-        
-        user_discounts[user_id] = chosen_discount
-        
-        res_text = f"🎡 **Çark Döndü ve Durdu!**\n\n✨ **Tebrikler!** Çarktan **%{chosen_discount} İndirim** kazandın!\n\n"
-        
-        if chosen_discount == 100:
-            res_text += "🏆 İnanılmaz! **%100 İndirim** kazandın! Butonlardaki paketler tamamen **0 Yıldız (Ücretsiz)** oldu reisim!"
-        else:
-            res_text += f"Bu indirimle paketlerin fiyatı düştü reisim!"
-
-        m = InlineKeyboardMarkup()
-        m.add(InlineKeyboardButton("🔄 Tekrar Çevir", callback_data="open_lucky_wheel"))
-        m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
-        
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=res_text, reply_markup=m, parse_mode="Markdown")
-        return
-
     if data == "open_profile":
         bot.answer_callback_query(call.id)
         user_platforms = unlocked_platforms.get(user_id, {})
@@ -434,22 +336,15 @@ def callback_handler(call):
             try:
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     ydl.download([link])
-
                 with open(output, 'rb') as f:
                     if is_audio:
                         bot.send_audio(chat_id, f, caption=get_text(user_id, "success_audio"), timeout=120)
                     else:
                         bot.send_video(chat_id, f, caption=get_text(user_id, "success_video"), timeout=120)
-                if os.path.exists(output): 
-                    os.remove(output)
+                if os.path.exists(output): os.remove(output)
             except Exception as e:
                 bot.send_message(chat_id, f"❌ Hata: Bu gönderi desteklenmiyor.")
-                if os.path.exists(output): 
-                    os.remove(output)
-            except Exception as e:
-                bot.send_message(chat_id, f"❌ Hata: Bu gönderi desteklenmiyor.")
-                if os.path.exists(output): 
-                    os.remove(output)
+                if os.path.exists(output): os.remove(output)
             
             try: bot.delete_message(chat_id, status_msg.message_id)
             except: pass
@@ -469,32 +364,9 @@ def callback_handler(call):
     payloads = {"unlock_yt_uzun": "uzun", "unlock_yt_shorts": "shorts", "unlock_tiktok": "tiktok", "unlock_insta": "insta"}
     if data in payloads:
         bot.answer_callback_query(call.id)
+        prices = {"uzun": 150, "shorts": 150, "tiktok": 200, "insta": 180}
         pl = payloads[data]
-        
-        base_prices = {"uzun": 150, "shorts": 150, "tiktok": 200, "insta": 180}
-        disc = user_discounts.get(user_id, 0)
-        
-        if disc == 100:
-            if user_id not in unlocked_platforms: unlocked_platforms[user_id] = {}
-            unlocked_platforms[user_id][pl] = {"hak": 5200, "bitis": time.time() + (1596 * 86400)}
-            user_states[user_id] = f"waiting_for_{pl}"
-            user_discounts[user_id] = 0  
-            bot.send_message(chat_id, f"🎉 Çark İndirimi Kullanıldı! 5200 indirme hakkın ücretsiz tanımlandı reisim!")
-            return
-            
-        final_price = base_prices[pl]
-        if disc > 0:
-            final_price = int(final_price * (100 - disc) / 100)
-            
-        bot.send_invoice(
-            chat_id=chat_id, 
-            title=pl.capitalize(), 
-            description="5200 Hak", 
-            invoice_payload=pl, 
-            provider_token="", 
-            currency="XTR", 
-            prices=[LabeledPrice(pl, final_price)]
-        )
+        bot.send_invoice(chat_id=chat_id, title=pl.capitalize(), description="5200 Hak", invoice_payload=pl, provider_token="", currency="XTR", prices=[LabeledPrice(pl, prices[pl])])
 
 @bot.pre_checkout_query_handler(func=lambda q: True)
 def checkout(q):
