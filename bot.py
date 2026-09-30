@@ -4,7 +4,7 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, LabeledPrice
 import yt_dlp
 
-TOKEN = "8892383697:AAE9QDoXKSHkfdXa_0rrIgmUnVBFrre2bvc"
+TOKEN = "8927197392:AAGsATpv90EwcijG2ppvRJJ5QRiz15S_hZc"
 bot = telebot.TeleBot(TOKEN)
 ADMIN_ID = 8520025523
 
@@ -12,6 +12,7 @@ user_states = {}
 unlocked_platforms = {} 
 user_languages = {} 
 pending_links = {}  
+fast_downloads = {} # 3 yıldız ile hızlandırılanları takip etmek için
 
 ALL_LANGUAGES = [
     ("🇹🇷 Türkçe", "tr"), 
@@ -35,6 +36,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 Ana Menüye Dön",
         "admin_prompt": "👑 **Admin Özel:** Lütfen geçerli bir **{p_key}** bağlantısı gönder:",
         "payment_success": "🎉 Ödeme başarılı! 198300 indirme hakkın tanımlandı.",
+        "fast_payment_success": "⚡ Hızlı indirme açıldı! Video saniyeler içinde indiriliyor...",
         "no_rights": "⚠️ Bu platform için aktif hakkın bulunmuyor.",
         "expired": "⏳ Süren veya indirme hakkın doldu.",
         "err_uzun": "❌ Bu seçenek sadece **Normal YouTube Uzun Video** içindir!",
@@ -44,7 +46,7 @@ TRANSLATIONS = {
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
-        "multi_progress": "🔄 Toplu İndirme: **{current}/{total}** adet içerik işleniyor...",
+        "btn_fast": "⚡ 3 Yıldız ile 10 Sn'de İndir",
         "success_video": "✅ Videon hazır dostum!😀",
         "success_audio": "🎵 Ses dosyan hazır!",
         "start_fallback": "Lütfen `/start` yazıp menüden seçim yap."
@@ -62,6 +64,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 Vegere Menuya Sereke",
         "admin_prompt": "👑 **Taybet a Admin:** Lînka **{p_key}** bişîne:",
         "payment_success": "🎉 Dravdan serketî bû!",
+        "fast_payment_success": "⚡ Daxistina lezgîn çalak bû!",
         "no_rights": "⚠️ Mafê te yê vê platformê nîne.",
         "expired": "⏳ Dem an mafê te qediya.",
         "err_uzun": "❌ Tenê ji bo vîdyoyên dirêj ên YouTube!",
@@ -71,7 +74,7 @@ TRANSLATIONS = {
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 MP3 Daxîne",
-        "multi_progress": "🔄 Daxistina berhev: **{current}/{total}**...",
+        "btn_fast": "⚡ Bi 3 Stêrkan Di 10 Saniyê de Daxîne",
         "success_video": "✅ Vîdyo amade ye!",
         "success_audio": "🎵 Pelê deng amade ye!",
         "start_fallback": "Ji kerema xwe `/start` binivîse."
@@ -89,6 +92,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 Back to Main Menu",
         "admin_prompt": "👑 **Admin Special:** Send valid **{p_key}** links:",
         "payment_success": "🎉 Payment successful!",
+        "fast_payment_success": "⚡ Fast download activated!",
         "no_rights": "⚠️ You don't have rights for this platform.",
         "expired": "⏳ Your rights have expired.",
         "err_uzun": "❌ Only for YouTube Long Videos!",
@@ -98,7 +102,7 @@ TRANSLATIONS = {
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
-        "multi_progress": "🔄 Downloading: **{current}/{total}**...",
+        "btn_fast": "⚡ Download in 10s (3 Stars)",
         "success_video": "✅ Video ready!",
         "success_audio": "🎵 Audio file is ready!",
         "start_fallback": "Please type `/start`."
@@ -116,6 +120,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 العودة للقائمة الرئيسية",
         "admin_prompt": "👑 **خاص للمشرف:** أرسل الروابط:",
         "payment_success": "🎉 نجح الدفع!",
+        "fast_payment_success": "⚡ تم تفعيل التنزيل السريع!",
         "no_rights": "⚠️ ليس لديك حقوق نشطة.",
         "expired": "⏳ انتهت صلاحية حقوقك.",
         "err_uzun": "❌ لفيديوهات يوتيوب الطويلة فقط!",
@@ -125,7 +130,7 @@ TRANSLATIONS = {
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
-        "multi_progress": "🔄 جاري التحميل: **{current}/{total}**...",
+        "btn_fast": "⚡ تنزيل في 10 ثوانٍ (3 نجوم)",
         "success_video": "✅ الفيديو جاهز!",
         "success_audio": "🎵 الملف الصوتي جاهز!",
         "start_fallback": "يرجى كتابة `/start`."
@@ -143,6 +148,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 Yzyna",
         "admin_prompt": "👑 **Admin:** Salgylary ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
+        "fast_payment_success": "⚡ Çalt ýükleme işjeňleşdirildi!",
         "no_rights": "⚠️ Ygtyýaryňyz ýok.",
         "expired": "⏳ Wagtyňyz gutardy.",
         "err_uzun": "❌ Diňe uzyn wideolar üçin!",
@@ -152,7 +158,7 @@ TRANSLATIONS = {
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
         "btn_audio": "🎵 MP3",
-        "multi_progress": "🔄 Ýüklenýär: **{current}/{total}**...",
+        "btn_fast": "⚡ 3 Ýyldyz bilen 10 sekuntda ýükle",
         "success_video": "✅ Wideo taýýar!",
         "success_audio": "🎵 Ses taýýar!",
         "start_fallback": "`/start` ýazyň."
@@ -241,6 +247,19 @@ def callback_handler(call):
         bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
         return
 
+    if data == "fast_download_invoice":
+        bot.answer_callback_query(call.id)
+        bot.send_invoice(
+            chat_id=chat_id,
+            title="Hızlı İndirme",
+            description="3 Yıldız ile 10 Saniyede İndir",
+            invoice_payload="fast_download_boost",
+            provider_token="",
+            currency="XTR",
+            prices=[LabeledPrice("Hızlı İndir", 3)]
+        )
+        return
+
     if data in ["dl_video", "dl_audio"]:
         bot.answer_callback_query(call.id)
         link_data = pending_links.get(user_id)
@@ -266,8 +285,36 @@ def callback_handler(call):
                     break
                 udat["hak"] -= 1
 
-            status_msg = bot.send_message(chat_id, get_text(user_id, "multi_progress").format(current=index, total=total_links), parse_mode="Markdown")
+            # Animasyonlu Sayaç ve 3 Yıldız Butonu Başlangıcı
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton(get_text(user_id, "btn_fast"), callback_data="fast_download_invoice"))
             
+            status_msg = bot.send_message(
+                chat_id, 
+                f"🔄 İndiriliyor: **%1**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp 10 saniyede indirebilirsin!)*", 
+                reply_markup=markup, 
+                parse_mode="Markdown"
+            )
+            
+            fast_downloads[user_id] = False
+            
+            # 1'den 100'e animasyonlu akış (Normalde yaklaşık 3 dakika sürer simülasyonu)
+            for percent in range(5, 101, 5):
+                if fast_downloads.get(user_id, False):
+                    break # Hızlı ödeme geldiyse döngüyü kır ve direkt %100 yap
+                
+                time.sleep(0.5) # Adım hızı (Toplam süre ayarı için)
+                try:
+                    bot.edit_message_text(
+                        chat_id=chat_id,
+                        message_id=status_msg.message_id,
+                        text=f"🔄 İndiriliyor: **%{percent}**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp 10 saniyede indirebilirsin!)*",
+                        reply_markup=markup,
+                        parse_mode="Markdown"
+                    )
+                except:
+                    pass
+
             output = f"aud_{user_id}_{index}.m4a" if is_audio else f"vid_{user_id}_{index}.mp4"
             
             ydl_opts = {
@@ -289,7 +336,7 @@ def callback_handler(call):
                         bot.send_video(chat_id, f, caption=get_text(user_id, "success_video"), timeout=120)
                 if os.path.exists(output): os.remove(output)
             except Exception as e:
-                bot.send_message(chat_id, f"❌ Hata ({index}. link): Bu gönderi desteklenmiyor veya fotoğraf/slayt gönderisi olabilir.")
+                bot.send_message(chat_id, f"❌ Hata ({index}. link): Bu gönderi desteklenmiyor veya dosya çok büyük.")
                 if os.path.exists(output): os.remove(output)
             
             try: bot.delete_message(chat_id, status_msg.message_id)
@@ -297,6 +344,7 @@ def callback_handler(call):
             
         pending_links.pop(user_id, None)
         user_states[user_id] = None
+        fast_downloads.pop(user_id, None)
         return
 
     if user_id == ADMIN_ID and data.startswith("unlock_"):
@@ -322,6 +370,12 @@ def payment_success(message):
     user_id = message.from_user.id
     chat_id = message.chat.id
     payload = message.successful_payment.invoice_payload
+    
+    if payload == "fast_download_boost":
+        fast_downloads[user_id] = True
+        bot.send_message(chat_id, get_text(user_id, "fast_payment_success"))
+        return
+
     if user_id not in unlocked_platforms: unlocked_platforms[user_id] = {}
     unlocked_platforms[user_id][payload] = {"hak": 198300, "bitis": time.time() + (1596 * 86400)}
     user_states[user_id] = f"waiting_for_{payload}"
