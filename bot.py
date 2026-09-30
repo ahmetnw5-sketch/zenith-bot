@@ -1,7 +1,6 @@
 import os
 import time
 import datetime
-import random
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, LabeledPrice
 import yt_dlp
@@ -16,6 +15,7 @@ user_languages = {}
 pending_links = {}  
 fast_downloads = {} 
 
+# Günlük ödül sistemi için değişkenler
 daily_winners = {}  
 last_reward_date = ""
 
@@ -29,7 +29,7 @@ ALL_LANGUAGES = [
 
 TRANSLATIONS = {
     "tr": {
-        "welcome": "🤖 **Video İndirme Botuna Hoş Geldin!**\n\nİşlem yapmak istediğin seçeneğe tıkla:",
+        "welcome": "🤖 **Video İndirici Botuna Hoş Geldin!**\n\nİşlem yapmak istediğin seçeneğe tıkla:",
         "admin_active": "\n\n👑 *Admin Paneli Aktif!*",
         "btn_uzun": "🎬 YouTube Uzun (150 Yıldız) - 5200 Hak",
         "btn_shorts": "📱 YouTube Shorts (150 Yıldız) - 5200 Hak",
@@ -44,6 +44,10 @@ TRANSLATIONS = {
         "fast_payment_success": "⚡ Hızlı indirme açıldı! Video hemen indiriliyor...",
         "no_rights": "⚠️ Bu platform için aktif hakkın bulunmuyor.",
         "expired": "⏳ Süren veya indirme hakkın doldu.",
+        "err_uzun": "❌ Bu seçenek sadece **Normal YouTube Uzun Video** içindir!",
+        "err_shorts": "❌ Bu seçenek sadece **YouTube Shorts** içindir!",
+        "err_tiktok": "❌ Bu seçenek sadece **TikTok** bağlantısı olmalıdır!",
+        "err_insta": "❌ Bu seçenek sadece **Instagram** bağlantısı olmalıdır!",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
@@ -53,7 +57,7 @@ TRANSLATIONS = {
         "start_fallback": "Lütfen `/start` yazıp menüden seçim yap."
     },
     "ku": {
-        "welcome": "🤖 **Bi xêr hatî Botê Daxistinê!**",
+        "welcome": "🤖 **Bi xêr hatî Botê Daxistina Vîdyoyan!**",
         "admin_active": "\n\n👑 *Panela Admin Çalak e!*",
         "btn_uzun": "🎬 Vîdyoya Dirêj a YouTube",
         "btn_shorts": "📱 YouTube Shorts",
@@ -68,6 +72,10 @@ TRANSLATIONS = {
         "fast_payment_success": "⚡ Daxistina lezgîn çalak bû!",
         "no_rights": "⚠️ Mafê te yê vê platformê nîne.",
         "expired": "⏳ Dem an mafê te qediya.",
+        "err_uzun": "❌ Tenê ji bo vîdyoyên dirêj ên YouTube!",
+        "err_shorts": "❌ Tenê ji bo YouTube Shorts!",
+        "err_tiktok": "❌ Tenê ji bo TikTok!",
+        "err_insta": "❌ Tenê ji bo Instagram!",
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 Pelê deng Daxîne",
@@ -92,6 +100,10 @@ TRANSLATIONS = {
         "fast_payment_success": "⚡ Fast download activated!",
         "no_rights": "⚠️ You don't have rights for this platform.",
         "expired": "⏳ Your rights have expired.",
+        "err_uzun": "❌ Only for YouTube Long Videos!",
+        "err_shorts": "❌ Only for YouTube Shorts!",
+        "err_tiktok": "❌ Only for TikTok!",
+        "err_insta": "❌ Only for Instagram!",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -101,7 +113,7 @@ TRANSLATIONS = {
         "start_fallback": "Please type `/start`."
     },
     "ar": {
-        "welcome": "🤖 **مرحباً بك في بوت التحميل!**",
+        "welcome": "🤖 **مرحباً بك في بوت تحميل الفيديو!**",
         "admin_active": "\n\n👑 *لوحة المشرف نشطة!*",
         "btn_uzun": "🎬 فيديو يوتيوب طويل",
         "btn_shorts": "📱 يوتيوب شورتس",
@@ -116,6 +128,10 @@ TRANSLATIONS = {
         "fast_payment_success": "⚡ تم تفعيل التنزيل السريع!",
         "no_rights": "⚠️ ليس لديك حقوق نشطة.",
         "expired": "⏳ انتهت صلاحية حقوقك.",
+        "err_uzun": "❌ لفيديوهات يوتيوب الطويلة فقط!",
+        "err_shorts": "❌ ليوتيوب شورتس فقط!",
+        "err_tiktok": "❌ لتيك توك فقط!",
+        "err_insta": "❌ لإنستغرام فقط!",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -130,7 +146,7 @@ TRANSLATIONS = {
         "btn_uzun": "🎬 YouTube Uzyn Wideo",
         "btn_shorts": "📱 YouTube Shorts",
         "btn_tiktok": "🎵 TikTok Wideo",
-        "btn_insta": "Instagram Reels",
+        "btn_insta": "📸 Instagram Reels",
         "btn_profile": "👤 Profilim / Galan Haklarym",
         "btn_lang": "🌐 Dil",
         "lang_select": "🌐 **Dil saýlaň:**",
@@ -140,6 +156,10 @@ TRANSLATIONS = {
         "fast_payment_success": "⚡ Çalt ýükleme işjeňleşdirildi!",
         "no_rights": "⚠️ Ygtyýaryňyz ýok.",
         "expired": "⏳ Wagtyňyz gutardy.",
+        "err_uzun": "❌ Diňe uzyn wideolar üçin!",
+        "err_shorts": "❌ Diňe Shorts üçin!",
+        "err_tiktok": "❌ Diňe TikTok üçin!",
+        "err_insta": "❌ Diňe Instagram üçin!",
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
         "btn_audio": "🎵 MP3",
@@ -187,6 +207,7 @@ def send_welcome(message):
     today_list = daily_winners.get(current_date_str, [])
     
     if current_hour == 13 and 0 <= current_minute <= 5 and user_id not in today_list and len(today_list) < 3:
+        import random
         platforms = ["uzun", "shorts", "tiktok", "insta"]
         chosen_platform = random.choice(platforms)
         random_days = random.randint(7, 14)
@@ -209,6 +230,7 @@ def send_welcome(message):
             f"✨ **Hediye Paket:** {p_names[chosen_platform]}\n"
             f"⏳ **Süre:** {random_days} Gün\n"
             f"🎯 **Hak:** {random_hak} Adet\n"
+            f"*(Profilinden detayları görebilirsin!)* 🎉\n"
         )
 
     txt = get_text(user_id, "welcome") + reward_message
@@ -296,6 +318,7 @@ def callback_handler(call):
         links = link_data["links"]
         is_audio = (data == "dl_audio")
         current_state = user_states.get(user_id, "")
+        
         p_type = next((k for k in ["uzun", "shorts", "tiktok", "insta"] if k in current_state), "")
 
         for index, link in enumerate(links[:999], 1):
@@ -312,19 +335,45 @@ def callback_handler(call):
             markup = InlineKeyboardMarkup()
             markup.add(InlineKeyboardButton(get_text(user_id, "btn_fast"), callback_data="fast_download_invoice"))
             
-            status_msg = bot.send_message(chat_id, f"🔄 İndiriliyor: **%1**", reply_markup=markup, parse_mode="Markdown")
+            status_msg = bot.send_message(
+                chat_id, 
+                f"🔄 İndiriliyor: **%1**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp anında indirebilirsin!)*", 
+                reply_markup=markup, 
+                parse_mode="Markdown"
+            )
+            
             fast_downloads[user_id] = False
             
             for percent in range(5, 101, 20):
                 if fast_downloads.get(user_id, False):
+                    try:
+                        bot.edit_message_text(
+                            chat_id=chat_id,
+                            message_id=status_msg.message_id,
+                            text=f"⚡ İndiriliyor: **%100**\n\n*(Hızlı indirme uygulandı!)*",
+                            parse_mode="Markdown"
+                        )
+                    except:
+                        pass
                     break 
+                
                 time.sleep(1) 
                 try:
-                    bot.edit_message_text(chat_id=chat_id, message_id=status_msg.message_id, text=f"🔄 İndiriliyor: **%{percent}**", reply_markup=markup, parse_mode="Markdown")
+                    bot.edit_message_text(
+                        chat_id=chat_id,
+                        message_id=status_msg.message_id,
+                        text=f"🔄 İndiriliyor: **%{percent}**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp anında indirebilirsin!)*",
+                        reply_markup=markup,
+                        parse_mode="Markdown"
+                    )
                 except:
                     pass
 
+            if fast_downloads.get(user_id, False):
+                time.sleep(3)
+
             output = f"aud_{user_id}_{index}.m4a" if is_audio else f"vid_{user_id}_{index}.mp4"
+            
             ydl_opts = {
                 'format': 'bestaudio/best' if is_audio else 'best/bestvideo+bestaudio',
                 'outtmpl': output,
@@ -336,6 +385,7 @@ def callback_handler(call):
             try:
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     ydl.download([link])
+
                 with open(output, 'rb') as f:
                     if is_audio:
                         bot.send_audio(chat_id, f, caption=get_text(user_id, "success_audio"), timeout=120)
@@ -343,7 +393,7 @@ def callback_handler(call):
                         bot.send_video(chat_id, f, caption=get_text(user_id, "success_video"), timeout=120)
                 if os.path.exists(output): os.remove(output)
             except Exception as e:
-                bot.send_message(chat_id, f"❌ Hata: Bu gönderi desteklenmiyor.")
+                bot.send_message(chat_id, f"❌ Hata ({index}. link): Bu gönderi desteklenmiyor veya dosya çok büyük.")
                 if os.path.exists(output): os.remove(output)
             
             try: bot.delete_message(chat_id, status_msg.message_id)
@@ -396,11 +446,34 @@ def handle_link(message):
     
     if raw_text.startswith("/"):
         return
-
+        
     links = [line.strip() for line in raw_text.splitlines() if line.strip().startswith("http")]
+    
     if not links:
         bot.reply_to(message, get_text(user_id, "start_fallback"))
         return
+
+    current_state = user_states.get(user_id)
+    for text in links[:999]:
+        text_lower = text.lower()
+        is_valid, error_msg = True, ""
+        
+        if current_state == "waiting_for_uzun":
+            if "youtube.com/shorts" in text_lower or ("youtube.com" not in text_lower and "youtu.be" not in text_lower):
+                is_valid, error_msg = False, get_text(user_id, "err_uzun")
+        elif current_state == "waiting_for_shorts":
+            if "youtube.com/shorts" not in text_lower:
+                is_valid, error_msg = False, get_text(user_id, "err_shorts")
+        elif current_state == "waiting_for_tiktok":
+            if "tiktok.com" not in text_lower:
+                is_valid, error_msg = False, get_text(user_id, "err_tiktok")
+        elif current_state == "waiting_for_insta":
+            if "instagram.com" not in text_lower:
+                is_valid, error_msg = False, get_text(user_id, "err_insta")
+        
+        if not is_valid and current_state:
+            bot.send_message(chat_id, error_msg, parse_mode="Markdown")
+            return
 
     pending_links[user_id] = {"links": links[:999]}
     format_markup = InlineKeyboardMarkup(row_width=2)
