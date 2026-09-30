@@ -147,7 +147,7 @@ TRANSLATIONS = {
         "admin_prompt": "👑 **خاص للمشرف:** أرسل الروابط:",
         "payment_success": "🎉 نجح الدفع!",
         "fast_payment_success": "⚡ تم تفعيل التنزيل السريع!",
-        "no_rights": "⚠️️ ليس لديك حقوق نشطة.",
+        "no_rights": "⚠ ليس لديك حقوق نشطة.",
         "expired": "⏳ انتهت صلاحية حقوقك.",
         "err_uzun": "❌ لفيديوهات يوتيوب الطويلة فقط!",
         "err_shorts": "❌ ليوتيوب شورتس فقط!",
@@ -308,145 +308,20 @@ def callback_handler(call):
     if data.startswith("set_lang_"):
         lang_code = data.split("_")[2]
         user_languages[user_id] = lang_code
-        bot.answer_callback_query(call.id, f"✅ Dil: {lang_code.upper()}")
+        bot.answer_callback_query(call.id, f"✅ Dil seçildi: {lang_code.upper()}")
+        
+        # Dil değiştiği an ana menüyü seçilen yeni dille hemen güncelle
         txt = get_text(user_id, "welcome", name=user_display_name)
-        if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
-        return
-
-    if data == "back_to_main":
-        bot.answer_callback_query(call.id)
-        user_states[user_id] = None
-        txt = get_text(user_id, "welcome", name=user_display_name)
-        if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
-        return
-
-    if data == "fast_download_invoice":
-        bot.answer_callback_query(call.id)
-        bot.send_invoice(
-            chat_id=chat_id,
-            title="Hızlı İndirme",
-            description="7 Yıldız ile Anında İndir",
-            invoice_payload="fast_download_boost",
-            provider_token="",
-            currency="XTR",
-            prices=[LabeledPrice("Hızlı İndir", 7)]
+        if user_id == ADMIN_ID: 
+            txt += get_text(user_id, "admin_active")
+            
+        bot.edit_message_text(
+            chat_id=chat_id, 
+            message_id=call.message.message_id, 
+            text=txt, 
+            reply_markup=get_main_keyboard(user_id), 
+            parse_mode="Markdown"
         )
-        return
-
-    if data in ["dl_video", "dl_audio"]:
-        bot.answer_callback_query(call.id)
-        link_data = pending_links.get(user_id)
-        if not link_data:
-            bot.send_message(chat_id, get_text(user_id, "start_fallback"))
-            return
-        
-        links = link_data["links"]
-        is_audio = (data == "dl_audio")
-        current_state = user_states.get(user_id, "")
-        
-        p_type = next((k for k in ["uzun", "shorts", "tiktok", "insta"] if k in current_state), "")
-
-        for index, link in enumerate(links, 1):
-            if user_id != ADMIN_ID and p_type:
-                if user_id not in unlocked_platforms or p_type not in unlocked_platforms[user_id]:
-                    bot.send_message(chat_id, get_text(user_id, "no_rights"))
-                    break
-                udat = unlocked_platforms[user_id][p_type]
-                if time.time() > udat["bitis"] or udat["hak"] <= 0:
-                    bot.send_message(chat_id, get_text(user_id, "expired"))
-                    break
-                udat["hak"] -= 1
-
-            markup = InlineKeyboardMarkup()
-            markup.add(InlineKeyboardButton(get_text(user_id, "btn_fast"), callback_data="fast_download_invoice"))
-            
-            status_msg = bot.send_message(
-                chat_id, 
-                f"🔄 İndiriliyor: **%1**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp anında indirebilirsin!)*", 
-                reply_markup=markup, 
-                parse_mode="Markdown"
-            )
-            
-            fast_downloads[user_id] = False
-            
-            for percent in range(5, 101, 20):
-                if fast_downloads.get(user_id, False):
-                    try:
-                        bot.edit_message_text(
-                            chat_id=chat_id,
-                            message_id=status_msg.message_id,
-                            text=f"⚡ İndiriliyor: **%100**\n\n*(Hızlı indirme uygulandı!)*",
-                            parse_mode="Markdown"
-                        )
-                    except:
-                        pass
-                    break 
-                
-                time.sleep(1) 
-                try:
-                    bot.edit_message_text(
-                        chat_id=chat_id,
-                        message_id=status_msg.message_id,
-                        text=f"🔄 İndiriliyor: **%{percent}**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp anında indirebilirsin!)*",
-                        reply_markup=markup,
-                        parse_mode="Markdown"
-                    )
-                except:
-                    pass
-
-            if fast_downloads.get(user_id, False):
-                time.sleep(3)
-
-            output = f"aud_{user_id}_{index}.m4a" if is_audio else f"vid_{user_id}_{index}.mp4"
-            
-            ydl_opts = {
-                'format': 'bestaudio/best' if is_audio else 'best/bestvideo+bestaudio',
-                'outtmpl': output,
-                'noplaylist': True,
-                'socket_timeout': 60,
-                'nocheckcertificate': True
-            }
-
-            try:
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download([link])
-
-                with open(output, 'rb') as f:
-                    if is_audio:
-                        bot.send_audio(chat_id, f, caption=get_text(user_id, "success_audio"), timeout=120)
-                    else:
-                        bot.send_video(chat_id, f, caption=get_text(user_id, "success_video"), timeout=120)
-                if os.path.exists(output): os.remove(output)
-            except Exception as e:
-                bot.send_message(chat_id, f"❌ Hata ({index}. link): Bu gönderi desteklenmiyor veya dosya çok büyük.")
-                if os.path.exists(output): os.remove(output)
-            
-            try: bot.delete_message(chat_id, status_msg.message_id)
-            except: pass
-            
-        pending_links.pop(user_id, None)
-        user_states[user_id] = None
-        fast_downloads.pop(user_id, None)
-        return
-
-    if user_id == ADMIN_ID and data.startswith("unlock_"):
-        p_key = data.replace("unlock_", "").replace("yt_", "")
-        user_states[user_id] = f"waiting_for_{p_key}"
-        bot.answer_callback_query(call.id)
-        m = InlineKeyboardMarkup()
-        m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "lang_select"), reply_markup=m, parse_mode="Markdown")
-        return
-
-    if data.startswith("set_lang_"):
-        lang_code = data.split("_")[2]
-        user_languages[user_id] = lang_code
-        bot.answer_callback_query(call.id, f"✅ Dil: {lang_code.upper()}")
-        txt = get_text(user_id, "welcome", name=user_display_name)
-        if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
         return
 
     if data == "back_to_main":
