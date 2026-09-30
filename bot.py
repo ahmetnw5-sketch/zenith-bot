@@ -41,7 +41,7 @@ TRANSLATIONS = {
     "tr": {
         "welcome": (
             "⚡ **Zenith İndirme Botuna Hoş Geldiniz!**\n\n"
-            "Versiyon **2.8.4.6** sürümüyle karşınızdayız! Bu botumuz tamamen filigransız ve hızlı videolar indirmeniz için tasarlandı.\n\n"
+            "Versiyon **2.8.4.7** sürümüyle karşınızdayız! Bu botumuz tamamen filigransız ve hızlı videolar indirmeniz için tasarlandı.\n\n"
             "🎯 **Nasıl Kullanılır?**\n"
             "İstediğiniz platform butonuna tıklayın, ardından indirmek istediğiniz videonun bağlantısını (linkini) bize gönderin. Saniyeler içinde videonuzu hazırlayalım!\n\n"
             "⚠️ **Önemli Kurallar & Uyarı:**\n"
@@ -76,7 +76,7 @@ TRANSLATIONS = {
         "start_fallback": "Lütfen `/start` yazıp menüden seçim yap."
     },
     "ku": {
-        "welcome": "🤖 **Silav {name}, Bi xêr hatî Botê Daxistina Vîdyoyan (Zenith v2.8.4.6)!**",
+        "welcome": "🤖 **Silav {name}, Bi xêr hatî Botê Daxistina Vîdyoyan (Zenith v2.8.4.7)!**",
         "admin_active": "\n\n👑 *Panela Admin Çalak e!*",
         "btn_uzun": "🎬 Vîdyoya Dirêj a YouTube",
         "btn_shorts": "📱 YouTube Shorts",
@@ -105,7 +105,7 @@ TRANSLATIONS = {
         "start_fallback": "Ji kerema xwe `/start` binivîse."
     },
     "en": {
-        "welcome": "⚡ **Hello {name}, Welcome to Zenith Downloader Bot (v2.8.4.6)!**",
+        "welcome": "⚡ **Hello {name}, Welcome to Zenith Downloader Bot (v2.8.4.7)!**",
         "admin_active": "\n\n👑 *Admin Panel Active!*",
         "btn_uzun": "🎬 YouTube Long Video",
         "btn_shorts": "📱 YouTube Shorts",
@@ -134,7 +134,7 @@ TRANSLATIONS = {
         "start_fallback": "Please type `/start`."
     },
     "ar": {
-        "welcome": "⚡ **مرحباً {name}، أهلاً بك في بوت تحميل Zenith (v2.8.4.6)!**",
+        "welcome": "⚡ **مرحباً {name}، أهلاً بك في بوت تحميل Zenith (v2.8.4.7)!**",
         "admin_active": "\n\n👑 *لوحة المشرف نشطة!*",
         "btn_uzun": "🎬 فيديو يوتيوب طويل",
         "btn_shorts": "📱 يوتيوب شورتس",
@@ -163,7 +163,7 @@ TRANSLATIONS = {
         "start_fallback": "يرجى كتابة `/start`."
     },
     "tk": {
-        "welcome": "⚡ **Salam {name}, Zenith Wideo ýükleýji bota hoş geldiňiz (v2.8.4.6)!**",
+        "welcome": "⚡ **Salam {name}, Zenith Wideo ýükleýji bota hoş geldiňiz (v2.8.4.7)!**",
         "admin_active": "\n\n👑 *Admin paneli işjeň!*",
         "btn_uzun": "🎬 YouTube Uzyn Wideo",
         "btn_shorts": "📱 YouTube Shorts",
@@ -310,7 +310,6 @@ def callback_handler(call):
         user_languages[user_id] = lang_code
         bot.answer_callback_query(call.id, f"✅ Dil seçildi: {lang_code.upper()}")
         
-        # Dil değiştiği an ana menüyü seçilen yeni dille hemen güncelle
         txt = get_text(user_id, "welcome", name=user_display_name)
         if user_id == ADMIN_ID: 
             txt += get_text(user_id, "admin_active")
@@ -411,12 +410,16 @@ def callback_handler(call):
 
             output = f"aud_{user_id}_{index}.m4a" if is_audio else f"vid_{user_id}_{index}.mp4"
             
+            # 4 GB'a kadar destekleyen ve TikTok/Reels engellerini aşan güçlü yt-dlp ayarları
             ydl_opts = {
-                'format': 'bestaudio/best' if is_audio else 'best/bestvideo+bestaudio',
+                'format': 'bestaudio/best' if is_audio else 'bestvideo+bestaudio/best',
                 'outtmpl': output,
                 'noplaylist': True,
-                'socket_timeout': 60,
-                'nocheckcertificate': True
+                'socket_timeout': 120,
+                'nocheckcertificate': True,
+                'max_filesize': 4294967296,  # 4 GB maksimum sınır
+                'geo_bypass': True,
+                'extractor_args': {'tiktok': {'web_app': True}}
             }
 
             try:
@@ -425,12 +428,12 @@ def callback_handler(call):
 
                 with open(output, 'rb') as f:
                     if is_audio:
-                        bot.send_audio(chat_id, f, caption=get_text(user_id, "success_audio"), timeout=120)
+                        bot.send_audio(chat_id, f, caption=get_text(user_id, "success_audio"), timeout=300)
                     else:
-                        bot.send_video(chat_id, f, caption=get_text(user_id, "success_video"), timeout=120)
+                        bot.send_video(chat_id, f, caption=get_text(user_id, "success_video"), timeout=300)
                 if os.path.exists(output): os.remove(output)
             except Exception as e:
-                bot.send_message(chat_id, f"❌ Hata ({index}. link): Bu gönderi desteklenmiyor veya dosya çok büyük.")
+                bot.send_message(chat_id, f"❌ Hata ({index}. link): TikTok/Platform koruması veya dosya boyutu 4 GB sınırını aştı.")
                 if os.path.exists(output): os.remove(output)
             
             try: bot.delete_message(chat_id, status_msg.message_id)
