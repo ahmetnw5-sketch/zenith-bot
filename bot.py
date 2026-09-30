@@ -33,21 +33,25 @@ TRANSLATIONS = {
     "tr": {
         "welcome": (
             "⚡ **Zenith İndirme Botuna Hoş Geldiniz!**\n\n"
-            "Seçtiğin platforma uygun bağlantıyı gönder, direkt indirelim reisim.\n\n"
+            "Versiyon **2.8.4.7** sürümüyle karşınızdayız! Bu botumuz tamamen filigransız ve hızlı videolar indirmeniz için tasarlandı.\n\n"
+            "🎯 **Nasıl Kullanılır?**\n"
+            "İstediğiniz platform butonuna tıklayın, ardından indirmek istediğiniz videonun bağlantısını (linkini) bize gönderin. Saniyeler içinde videonuzu hazırlayalım!\n\n"
+            "⚠️ **Önemli Kurallar & Uyarı:**\n"
+            "Bota üst üste küfür veya hakaret atıldığı tespit edilirse sistem otomatik olarak sizi engeller ve tüm VIP / indirme haklarınız sıfırlanır. Lütfen saygı çerçevesinde kalın.\n\n"
             "Selam **{name}**, işlem yapmak istediğin seçeneğe tıkla:"
         ),
         "admin_active": "\n\n👑 *Admin Paneli Aktif!*",
-        "btn_uzun": "🎬 YouTube Uzun",
-        "btn_shorts": "📱 YouTube Shorts",
-        "btn_tiktok": "🎵 TikTok İndir",
-        "btn_insta": "📸 Instagram Reels",
+        "btn_uzun": "🎬 YouTube Uzun (120 Yıldız) - 18753 Hak",
+        "btn_shorts": "📱 YouTube Shorts (120 Yıldız) - 18753 Hak",
+        "btn_tiktok": "🎵 TikTok İndir (120 Yıldız) - 18753 Hak",
+        "btn_insta": "📸 Instagram Reels (120 Yıldız) - 18753 Hak",
         "btn_profile": "👤 Profilim / Haklarım",
         "btn_lang": "🌐 Dil Seç / Language",
         "lang_select": "🌐 **Lütfen kullanmak istediğin dili seç:**",
         "back_menu": "🔙 Ana Menüye Dön",
-        "admin_prompt": "👑 **Admin / Seçim Aktif:** Lütfen geçerli bir **{p_key}** bağlantısı gönder:",
-        "payment_success": "🎉 Ödeme başarılı! Sınırsız hak tanımlandı.",
-        "err_platform": "❌ **Yanlış Platform!** Şu an `{current_menu}` menüsündesin. Lütfen buna uygun bir bağlantı gönder veya menüyü değiştir.",
+        "admin_prompt": "👑 **{p_key}** menüsündesin. Lütfen bu platforma ait geçerli bir bağlantı gönder:",
+        "payment_success": "🎉 Ödeme başarılı! 18.753 indirme hakkın tanımlandı.",
+        "err_platform": "❌ **Yanlış Platform!** Şu an `{current_menu}` menüsündesin. Lütfen buna uygun bir bağlantı gönder.",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
@@ -152,7 +156,7 @@ def send_welcome(message):
     user_id = message.from_user.id
     chat_id = message.chat.id
     user_states[user_id] = None
-    user_display_name = message.from_user.first_name or message.from_user.username or "Dostum"
+    user_display_name = message.from_user.first_name or message.from_user.username | "Dostum"
     
     now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
     current_date_str = now_tr.strftime("%Y-%m-%d")
@@ -170,7 +174,7 @@ def send_welcome(message):
         platforms = ["uzun", "shorts", "tiktok", "insta"]
         chosen_platform = random.choice(platforms)
         if user_id not in unlocked_platforms: unlocked_platforms[user_id] = {}
-        unlocked_platforms[user_id][chosen_platform] = {"hak": 99999, "bitis": time.time() + (30 * 86400)}
+        unlocked_platforms[user_id][chosen_platform] = {"hak": 18753, "bitis": time.time() + (365 * 86400)}
         daily_winners[current_date_str].append(user_id)
         reward_message = f"\n\n🎁 **Tebrikler! Günlük Ödülünü Kazandın!**\n"
 
@@ -196,9 +200,10 @@ def callback_handler(call):
         
         for p_key, p_name in platforms_list:
             if user_id == ADMIN_ID or (p_key in user_platforms and user_platforms[p_key]["hak"] > 0 and time.time() < user_platforms[p_key]["bitis"]):
-                profile_text += f"✅ **{p_name}**: Aktif\n"
+                hak = user_platforms[p_key]["hak"]
+                profile_text += f"✅ **{p_name}**: Aktif | Kalan Hak: `{hak}`\n"
             else:
-                profile_text += f"❌ **{p_name}**: Aktif Değil (Satın Alınmalı)\n"
+                profile_text += f"❌ **{p_name}**: Kilitli (120 Yıldız)\n"
                 
         m = InlineKeyboardMarkup()
         m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
@@ -240,6 +245,7 @@ def callback_handler(call):
         is_audio = (data == "dl_audio")
         output = f"aud_{user_id}.m4a" if is_audio else f"vid_{user_id}.mp4"
         
+        # TikTok ve genel platformlar için sağlamlaştırılmış yt_dlp ayarları
         ydl_opts = {
             'format': 'bestaudio/best' if is_audio else 'bestvideo+bestaudio/best',
             'outtmpl': output,
@@ -247,6 +253,9 @@ def callback_handler(call):
             'socket_timeout': 120,
             'nocheckcertificate': True,
             'geo_bypass': True,
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            },
             'extractor_args': {'tiktok': {'web_app': True}}
         }
 
@@ -262,7 +271,7 @@ def callback_handler(call):
             if os.path.exists(output): os.remove(output)
         except Exception as e:
             if os.path.exists(output): os.remove(output)
-            bot.send_message(chat_id, f"❌ İndirme sırasında hata oluştu.")
+            bot.send_message(chat_id, f"❌ İndirme sırasında hata oluştu: {str(e)[:50]}")
             
         pending_links.pop(user_id, None)
         user_states[user_id] = None
@@ -272,18 +281,17 @@ def callback_handler(call):
         p_key = data.replace("menu_", "")
         user_platforms = unlocked_platforms.get(user_id, {})
         
-        # Eğer admin değilse ve platform kilidi yoksa Ödeme (Invoice) gönderelim
+        # 120 Yıldız Fiyatlandırması ve Sadece o platforma özel hak kontrolü
         if user_id != ADMIN_ID and (p_key not in user_platforms or user_platforms[p_key]["hak"] <= 0 or time.time() > user_platforms[p_key]["bitis"]):
-            bot.answer_callback_query(call.id, "💳 Bu platform kilitli, ödeme sayfasına yönlendiriliyorsun!")
-            prices = {"uzun": 120, "shorts": 120, "tiktok": 120, "insta": 120}
+            bot.answer_callback_query(call.id, "💳 Bu platform kilitli, 120 Yıldız ödeme ekranı açılıyor!")
             bot.send_invoice(
                 chat_id=chat_id, 
-                title=f"{p_key.capitalize()} Platformu", 
-                description="Sadece bu platform için geçerli tam erişim hakkı", 
+                title=f"{p_key.upper()} Sınırsız Erişim", 
+                description="Sadece bu platform için geçerli 18.753 indirme hakkı", 
                 invoice_payload=p_key, 
                 provider_token="", 
                 currency="XTR", 
-                prices=[LabeledPrice(p_key, prices[p_key])]
+                prices=[LabeledPrice(p_key, 120)]
             )
             return
 
@@ -291,7 +299,7 @@ def callback_handler(call):
         bot.answer_callback_query(call.id)
         m = InlineKeyboardMarkup()
         m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt", p_key=p_key), reply_markup=m, parse_mode="Markdown")
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt", p_key=p_key.upper()), reply_markup=m, parse_mode="Markdown")
         return
 
 @bot.pre_checkout_query_handler(func=lambda q: True)
@@ -332,12 +340,11 @@ def handle_link(message):
 
     p_type = current_state.replace("active_", "")
     
-    # Kullanıcının attığı linkin hangi platforma ait olduğunu doğrula ve SIKI KONTROL ET
     link = next((line.strip() for line in raw_text.splitlines() if line.strip().startswith("http")), None)
     if not link:
         return
 
-    # Platform eşleşme testi
+    # Kesin Platform Eşleşme Kontrolü (Hata vermesini önleyen ve yanlışı engelleyen filtre)
     is_tiktok = "tiktok.com" in link or "vm.tiktok.com" in link or "vt.tiktok.com" in link
     is_insta = "instagram.com" in link
     is_yt = "youtube.com" in link or "youtu.be" in link
@@ -360,3 +367,4 @@ def handle_link(message):
     bot.send_message(chat_id, get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
 
 bot.infinity_polling()
+    
