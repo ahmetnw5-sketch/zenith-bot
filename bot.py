@@ -4,7 +4,7 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, LabeledPrice
 import yt_dlp
 
-TOKEN = "8927197392:AAGsATpv90EwcijG2ppvRJJ5QRiz15S_hZc"
+TOKEN = "8927197392:8892383697:AAE9QDoXKSHkfdXa_0rrIgmUnVBFrre2bvc"
 bot = telebot.TeleBot(TOKEN)
 ADMIN_ID = 8520025523
 
