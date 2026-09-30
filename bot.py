@@ -49,9 +49,8 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Dil Seç / Language",
         "lang_select": "🌐 **Lütfen kullanmak istediğin dili seç:**",
         "back_menu": "🔙 Ana Menüye Dön",
-        "admin_prompt": "👑 **{p_key}** menüsündesin. Lütfen bu platforma ait geçerli bir bağlantı gönder:",
+        "admin_prompt": "👑 **{p_key}** menüsündesin. Lütfen indirmek istediğin bağlantıyı gönder:",
         "payment_success": "🎉 Ödeme başarılı! 18.753 indirme hakkın tanımlandı.",
-        "err_platform": "❌ **Yanlış Platform!** Şu an `{current_menu}` menüsündesin. Lütfen buna uygun bir bağlantı gönder.",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
@@ -67,9 +66,8 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Ziman / Dil",
         "lang_select": "🌐 **Ji kerema xwe zimanê xwe hilbijêre:**",
         "back_menu": "🔙 Vegere Menuya Sereke",
-        "admin_prompt": "👑 Lînka **{p_key}** bişîne:",
+        "admin_prompt": "👑 Lînka xwe bişîne:",
         "payment_success": "🎉 Dravdan serketî bû!",
-        "err_platform": "❌ **Platforma Çewt!**",
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 Pelê deng Daxîne",
@@ -85,9 +83,8 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Language",
         "lang_select": "🌐 **Please select your language:**",
         "back_menu": "🔙 Back to Main Menu",
-        "admin_prompt": "👑 Send valid **{p_key}** link:",
+        "admin_prompt": "👑 Send your link:",
         "payment_success": "🎉 Payment successful!",
-        "err_platform": "❌ **Wrong Platform!**",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -103,9 +100,8 @@ TRANSLATIONS = {
         "btn_lang": "🌐 اللغة",
         "lang_select": "🌐 **يرجى اختيار لغتك:**",
         "back_menu": "🔙 العودة للقائمة الرئيسية",
-        "admin_prompt": "👑 أرسل رابط **{p_key}** صحيح:",
+        "admin_prompt": "👑 أرسل الرابط:",
         "payment_success": "🎉 نجح الدفع!",
-        "err_platform": "❌ **منصة خاطئة!**",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -123,7 +119,6 @@ TRANSLATIONS = {
         "back_menu": "🔙 Yzyna",
         "admin_prompt": "👑 Salgyny ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
-        "err_platform": "❌ **Ýalňyş платформа!**",
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
         "btn_audio": "🎵 MP3",
@@ -156,7 +151,7 @@ def send_welcome(message):
     user_id = message.from_user.id
     chat_id = message.chat.id
     user_states[user_id] = None
-    user_display_name = message.from_user.first_name or message.from_user.username | "Dostum"
+    user_display_name = message.from_user.first_name or message.from_user.username or "Dostum"
     
     now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
     current_date_str = now_tr.strftime("%Y-%m-%d")
@@ -239,13 +234,13 @@ def callback_handler(call):
         bot.answer_callback_query(call.id)
         link_data = pending_links.get(user_id)
         if not link_data:
+            bot.send_message(chat_id, "⚠️ Bağlantı bulunamadı veya zaman aşımına uğradı.")
             return
         
         link = link_data["link"]
         is_audio = (data == "dl_audio")
         output = f"aud_{user_id}.m4a" if is_audio else f"vid_{user_id}.mp4"
         
-        # TikTok ve genel platformlar için sağlamlaştırılmış yt_dlp ayarları
         ydl_opts = {
             'format': 'bestaudio/best' if is_audio else 'bestvideo+bestaudio/best',
             'outtmpl': output,
@@ -281,7 +276,6 @@ def callback_handler(call):
         p_key = data.replace("menu_", "")
         user_platforms = unlocked_platforms.get(user_id, {})
         
-        # 120 Yıldız Fiyatlandırması ve Sadece o platforma özel hak kontrolü
         if user_id != ADMIN_ID and (p_key not in user_platforms or user_platforms[p_key]["hak"] <= 0 or time.time() > user_platforms[p_key]["bitis"]):
             bot.answer_callback_query(call.id, "💳 Bu platform kilitli, 120 Yıldız ödeme ekranı açılıyor!")
             bot.send_invoice(
@@ -333,31 +327,13 @@ def handle_link(message):
         bot.reply_to(message, f"⚠️ **Küfür Uyarısı ({user_swear_counts[user_id]}/3)**")
         return
         
-    current_state = user_states.get(user_id)
-    if not current_state or not current_state.startswith("active_"):
-        bot.reply_to(message, "⚠️ Lütfen önce ana menüden işlem yapmak istediğin **platform butonuna** tıkla reisim!")
-        return
-
-    p_type = current_state.replace("active_", "")
-    
     link = next((line.strip() for line in raw_text.splitlines() if line.strip().startswith("http")), None)
     if not link:
+        bot.reply_to(message, "⚠️ Lütfen geçerli bir video bağlantısı (linki) gönderin.")
         return
 
-    # Kesin Platform Eşleşme Kontrolü (Hata vermesini önleyen ve yanlışı engelleyen filtre)
-    is_tiktok = "tiktok.com" in link or "vm.tiktok.com" in link or "vt.tiktok.com" in link
-    is_insta = "instagram.com" in link
-    is_yt = "youtube.com" in link or "youtu.be" in link
-
-    target_match = True
-    if p_type == "tiktok" and not is_tiktok: target_match = False
-    if p_type == "insta" and not is_insta: target_match = False
-    if (p_type == "uzun" or p_type == "shorts") and not is_yt: target_match = False
-
-    if not target_match and user_id != ADMIN_ID:
-        bot.reply_to(message, get_text(user_id, "err_platform", current_menu=p_type.upper()))
-        return
-
+    # KANAL ZORUNLULUĞU VEYA PLATFORM HATASI TAMAMEN KALdirILDI:
+    # Hangi menüde olursan ol veya hangi linki atarsan at doğrudan format seçimine yönlendirilir.
     pending_links[user_id] = {"link": link}
     format_markup = InlineKeyboardMarkup(row_width=2)
     format_markup.add(
@@ -367,4 +343,3 @@ def handle_link(message):
     bot.send_message(chat_id, get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
 
 bot.infinity_polling()
-    
