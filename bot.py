@@ -38,7 +38,7 @@ ALL_LANGUAGES = [
 TRANSLATIONS = {
     "tr": {
         "welcome": (
-            "✨🚀 **Zenith v2.5.0.5 Zirvesine Hoş Geldin Reisim!** 🔥💎\n\n"
+            "✨🚀 **Zenith v2.5.0.6 Zirvesine Hoş Geldin Reisim!** 🔥💎\n\n"
             "*Botun motorları son sürat çalışıyor, indirmeye hazır ol!* 👇🤖\n\n"
             "⚠️ **ÖNEMLİ DUYURU & KURALLAR:**\n"
             "Lütfen bot içinde veya bağlı gruplarda **küfür ve hakaret etmeyiniz**. "
@@ -47,7 +47,7 @@ TRANSLATIONS = {
             "(1 saat ile 10 gün arası) engellenirsiniz!\n\n"
             "Anlayışınız için teşekkür ederiz... 🙏✨"
         ),
-        "admin_active": "\n\n👑 *Zenith v2.5.0.5 Admin Paneli Aktif!*",
+        "admin_active": "\n\n👑 *Zenith v2.5.0.6 Admin Paneli Aktif!*",
         "btn_uzun": "🎬 YouTube Uzun",
         "btn_shorts": "📱 YouTube Shorts",
         "btn_tiktok": "🎵 TikTok İndir",
@@ -59,19 +59,17 @@ TRANSLATIONS = {
         "back_menu": "🔙 Ana Menüye Dön",
         "admin_prompt": "👑 **Zenith Admin Özel:** Lütfen geçerli bir **{p_key}** bağlantısı gönder:",
         "payment_success": "🎉 Ödeme başarılı! İndirme hakkın tanımlandı.",
-        "fast_payment_success": "⚡ Hızlı indirme açıldı!",
         "no_rights": "⚠️ Bu platform için aktif hak veya süren bulunmuyor.",
-        "expired": "⏳ Süren veya indirme hakkın doldu.",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
         "success_video": "✅ Videon hazır dostum!😀",
         "success_audio": "🎵 Ses dosyan hazır!",
         "start_fallback": "Lütfen `/start` yazıp menüden seçim yap veya platform butonuna bas.",
-        "maintenance_msg": "🛠 **Zenith v2.5.0.5 şu an bakımda reisim!** En kısa sürede döneceğiz."
+        "maintenance_msg": "🛠 **Zenith v2.5.0.6 şu an bakımda reisim!** En kısa sürede döneceğiz."
     },
     "ku": {
-        "welcome": "✨🚀 **Bi xêr hatî Qraliyeta Zenith v2.5.0.5!** 🔥💎",
+        "welcome": "✨🚀 **Bi xêr hatî Qraliyeta Zenith v2.5.0.6!** 🔥💎",
         "admin_active": "\n\n👑 *Panela Admin Çalak e!*",
         "btn_uzun": "🎬 Vîdyoya Dirêj a YouTube",
         "btn_shorts": "📱 YouTube Shorts",
@@ -84,9 +82,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 Vegere Menuya Sereke",
         "admin_prompt": "👑 **Taybet a Admin:** Lînka **{p_key}** bişîne:",
         "payment_success": "🎉 Dravdan serketî bû!",
-        "fast_payment_success": "⚡ Daxistina lezgîn çalak bû!",
         "no_rights": "⚠️ Mafê te yê vê platformê nîne.",
-        "expired": "⏳ Dem an mafê te qediya.",
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 Pelê deng Daxîne",
@@ -96,7 +92,7 @@ TRANSLATIONS = {
         "maintenance_msg": "🛠️ **Zenith niha di dema bakûr de ye!**"
     },
     "en": {
-        "welcome": "✨🚀 **Welcome to Zenith v2.5.0.5!** 🔥💎",
+        "welcome": "✨🚀 **Welcome to Zenith v2.5.0.6!** 🔥💎",
         "admin_active": "\n\n👑 *Admin Panel Active!*",
         "btn_uzun": "🎬 YouTube Long Video",
         "btn_shorts": "📱 YouTube Shorts",
@@ -109,9 +105,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 Back to Main Menu",
         "admin_prompt": "👑 **Admin Special:** Send valid **{p_key}** links:",
         "payment_success": "🎉 Payment successful!",
-        "fast_payment_success": "⚡ Fast download activated!",
         "no_rights": "⚠ You don't have rights for this platform.",
-        "expired": "⏳ Your rights have expired.",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -121,7 +115,7 @@ TRANSLATIONS = {
         "maintenance_msg": "🛠️ Zenith is currently under maintenance."
     },
     "ar": {
-        "welcome": "✨🚀 **مرحباً بك في Zenith v2.5.0.5!** 🔥💎",
+        "welcome": "✨🚀 **مرحباً بك في Zenith v2.5.0.6!** 🔥💎",
         "admin_active": "\n\n👑 *لوحة المشرف نشطة!*",
         "btn_uzun": "🎬 فيديو يوتيوب طويل",
         "btn_shorts": "📱 يوتيوب شورتس",
@@ -134,9 +128,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 العودة للقائمة الرئيسية",
         "admin_prompt": "👑 **خاص للمشرف:** أرسل الروابط:",
         "payment_success": "🎉 نجح الدفع!",
-        "fast_payment_success": "⚡ تم تفعيل التنزيل السريع!",
         "no_rights": "⚠️ ليس لديك حقوق نشطة.",
-        "expired": "⏳ انتهت صلاحية حقوقك.",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -146,7 +138,7 @@ TRANSLATIONS = {
         "maintenance_msg": "🛠️ Zenith تحت الصيانة حالياً."
     },
     "tk": {
-        "welcome": "✨🚀 **Zenith v2.5.0.5 Hoş geldiňiz!** 🔥💎",
+        "welcome": "✨🚀 **Zenith v2.5.0.6 Hoş geldiňiz!** 🔥💎",
         "admin_active": "\n\n👑 *Admin paneli işjeň!*",
         "btn_uzun": "🎬 YouTube Uzyn Wideo",
         "btn_shorts": "📱 YouTube Shorts",
@@ -159,9 +151,7 @@ TRANSLATIONS = {
         "back_menu": "🔙 Yzyna",
         "admin_prompt": "👑 **Admin:** Salgylary ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
-        "fast_payment_success": "⚡ Çalt ýükleme işjeňleşdirildi!",
         "no_rights": "⚠ Ygtyýaryňyz ýok.",
-        "expired": "⏳ Wagtyňyz gutardy.",
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
         "btn_audio": "🎵 MP3",
@@ -179,23 +169,19 @@ def get_text(user_id, key):
 
 def get_main_keyboard(user_id):
     disc = user_discounts.get(user_id, 0)
-    base_prices = {"uzun": 150, "shorts": 150, "tiktok": 200, "insta": 180}
+    base_prices = {"uzun": 7, "shorts": 7, "tiktok": 7, "insta": 7}
     user_platforms = unlocked_platforms.get(user_id, {})
     
     def calc_btn_label(p_key, btn_base_text):
-        if user_id != ADMIN_ID and p_key in user_platforms and user_platforms[p_key]["hak"] > 0 and time.time() < user_platforms[p_key]["bitis"]:
+        if user_id == ADMIN_ID:
+            return f"{btn_base_text} - (Sınırsız / Ücretsiz 👑)"
+        if p_key in user_platforms and user_platforms[p_key]["hak"] > 0 and time.time() < user_platforms[p_key]["bitis"]:
             hak = user_platforms[p_key]["hak"]
             kal_gun = max(0, int((user_platforms[p_key]["bitis"] - time.time()) / 86400))
             return f"{btn_base_text} - Aktif ({kal_gun} Gün / {hak} Hak)"
         
         p = base_prices[p_key]
-        if disc == 100:
-            return f"{btn_base_text} - 0 Yıldız (ÜCRETSİZ 🎁)"
-        elif disc > 0:
-            discounted = int(p * (100 - disc) / 100)
-            return f"{btn_base_text} - %{disc} İndirimli ({discounted} Yıldız)"
-        else:
-            return f"{btn_base_text} - ({p} Yıldız)"
+        return f"{btn_base_text} - ({p} Yıldız 🌟)"
 
     m = InlineKeyboardMarkup(row_width=1)
     m.add(
@@ -218,25 +204,6 @@ def toggle_maintenance(message):
     status_text = "🟢 Açıldı" if not is_maintenance_mode else "🔴 Kapatıldı (Bakım)"
     bot.reply_to(message, f"🛠️ Bakım Modu: {status_text}")
 
-@bot.message_handler(commands=['ai'])
-def handle_ai_query(message):
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-    if user_id in user_bans and time.time() < user_bans[user_id]:
-        bot.reply_to(message, "⛔ Engellendiğin için AI kullanamazsın.")
-        return
-    text_parts = message.text.split(maxsplit=1)
-    if len(text_parts) < 2:
-        bot.reply_to(message, "💡 Kullanım: `/ai <soru>`")
-        return
-    query = text_parts[1]
-    responses = [
-        f"🤖 **Zenith AI:** '{query}' konusunda sistemlerim en iyi optimizasyonun planlı çalışmaktan geçtiğini söylüyor!",
-        f"🧠 **Zenith AI:** '{query}' analizi tamamlandı. Adım adım ilerlemen en iyisi.",
-        f"⚡ **Zenith AI:** Sorunu aldım reisim! En mantıklı yaklaşım projeyi parçalara bölmektir."
-    ]
-    bot.reply_to(message, random.choice(responses), parse_mode="Markdown")
-
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     global last_reward_date, daily_winners, is_maintenance_mode
@@ -249,8 +216,6 @@ def send_welcome(message):
         bot.send_message(chat_id, get_text(user_id, "maintenance_msg"), parse_mode="Markdown")
         return
     user_states[user_id] = None
-    now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
-    current_hour, current_minute = now_tr.hour, now_tr.minute
     
     try:
         if user_id not in first_time_users:
@@ -259,23 +224,7 @@ def send_welcome(message):
                 with open("hosgeldin.ogg", "rb") as vf: bot.send_voice(chat_id, vf)
     except: pass
 
-    current_date_str = now_tr.strftime("%Y-%m-%d")
-    if last_reward_date != current_date_str:
-        last_reward_date = current_date_str
-        daily_winners[current_date_str] = []
-
-    reward_message = ""
-    today_list = daily_winners.get(current_date_str, [])
-    if current_hour == 13 and 0 <= current_minute <= 30 and user_id not in today_list and len(today_list) < 3:
-        platforms = ["uzun", "shorts", "tiktok", "insta"]
-        chosen_platform = random.choice(platforms)
-        random_days, random_hak = random.randint(7, 14), random.randint(50, 80)
-        if user_id not in unlocked_platforms: unlocked_platforms[user_id] = {}
-        unlocked_platforms[user_id][chosen_platform] = {"hak": random_hak, "bitis": time.time() + (random_days * 86400)}
-        daily_winners[current_date_str].append(user_id)
-        reward_message = f"\n\n🎁 **Ödül Kazandın!** {chosen_platform} - {random_days} Gün / {random_hak} Hak!"
-
-    txt = get_text(user_id, "welcome") + reward_message
+    txt = get_text(user_id, "welcome")
     if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
     bot.send_message(chat_id, txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
 
@@ -309,8 +258,8 @@ def callback_handler(call):
             bot.answer_callback_query(call.id, "⚠️ Hak bitti!", show_alert=True)
             return
         wheel_rights[user_id]["count"] -= 1
-        discounts = [50, 80, 89, 98, 99, 100]
-        chosen = random.choices(discounts, weights=[40, 25, 15, 10, 8, 2], k=1)[0]
+        discounts = [50, 80, 90, 100]
+        chosen = random.choice(discounts)
         user_discounts[user_id] = chosen
         m = InlineKeyboardMarkup()
         m.add(InlineKeyboardButton("🔄 Tekrar", callback_data="open_lucky_wheel"))
@@ -364,6 +313,34 @@ def callback_handler(call):
         links = link_data["links"]
         is_audio = (data == "dl_audio")
         
+        msg_progress = bot.send_message(chat_id, "📥 İndirme hazırlanıyor... %0")
+        
+        # Eğer adminse doğrudan %100 yap ve indir
+        if user_id == ADMIN_ID:
+            bot.edit_message_text("📥 İndiriliyor... %100", chat_id, msg_progress.message_id)
+            for index, link in enumerate(links[:999], 1):
+                output = f"aud_{user_id}_{index}.m4a" if is_audio else f"vid_{user_id}_{index}.mp4"
+                ydl_opts = {'format': 'bestaudio/best' if is_audio else 'best', 'outtmpl': output, 'noplaylist': True}
+                try:
+                    with yt_dlp.YoutubeDL(ydl_opts) as ydl: ydl.download([link])
+                    with open(output, 'rb') as f:
+                        if is_audio: bot.send_audio(chat_id, f)
+                        else: bot.send_video(chat_id, f)
+                    if os.path.exists(output): os.remove(output)
+                except:
+                    if os.path.exists(output): os.remove(output)
+            bot.delete_message(chat_id, msg_progress.message_id)
+            pending_links.pop(user_id, None)
+            return
+
+        # Normal kullanıcılar için yavaşça birer birer ilerlet (%1, %2, %3 ...)
+        for percent in range(1, 101, 1):
+            try:
+                bot.edit_message_text(f"📥 İndiriliyor... %{percent}", chat_id, msg_progress.message_id)
+            except:
+                pass
+            time.sleep(0.04)  # Yavaş ve akıcı ilerleme hissi
+
         for index, link in enumerate(links[:999], 1):
             output = f"aud_{user_id}_{index}.m4a" if is_audio else f"vid_{user_id}_{index}.mp4"
             ydl_opts = {'format': 'bestaudio/best' if is_audio else 'best', 'outtmpl': output, 'noplaylist': True}
@@ -375,6 +352,8 @@ def callback_handler(call):
                 if os.path.exists(output): os.remove(output)
             except:
                 if os.path.exists(output): os.remove(output)
+        
+        bot.delete_message(chat_id, msg_progress.message_id)
         pending_links.pop(user_id, None)
         return
 
@@ -389,16 +368,7 @@ def callback_handler(call):
     if data in payloads:
         bot.answer_callback_query(call.id)
         pl = payloads[data]
-        base_prices = {"uzun": 150, "shorts": 150, "tiktok": 200, "insta": 180}
-        disc = user_discounts.get(user_id, 0)
-        if disc == 100:
-            if user_id not in unlocked_platforms: unlocked_platforms[user_id] = {}
-            unlocked_platforms[user_id][pl] = {"hak": 5200, "bitis": time.time() + (1596 * 86400)}
-            user_discounts[user_id] = 0
-            bot.send_message(chat_id, "🎉 Ücretsiz hak tanımlandı!")
-            return
-        final_price = int(base_prices[pl] * (100 - disc) / 100) if disc > 0 else base_prices[pl]
-        bot.send_invoice(chat_id=chat_id, title=pl.capitalize(), description="Hak", invoice_payload=pl, provider_token="", currency="XTR", prices=[LabeledPrice(pl, final_price)])
+        bot.send_invoice(chat_id=chat_id, title=pl.capitalize(), description="7 Yıldız ile Anında İndir", invoice_payload=pl, provider_token="", currency="XTR", prices=[LabeledPrice(pl, 7)])
 
 @bot.pre_checkout_query_handler(func=lambda q: True)
 def checkout(q): bot.answer_pre_checkout_query(q.id, ok=True)
@@ -409,8 +379,8 @@ def payment_success(message):
     chat_id = message.chat.id
     payload = message.successful_payment.invoice_payload
     if user_id not in unlocked_platforms: unlocked_platforms[user_id] = {}
-    unlocked_platforms[user_id][payload] = {"hak": 5200, "bitis": time.time() + (1596 * 86400)}
-    bot.send_message(chat_id, "🎉 Ödeme başarılı!")
+    unlocked_platforms[user_id][payload] = {"hak": 9999, "bitis": time.time() + (365 * 86400)}
+    bot.send_message(chat_id, "🎉 7 Yıldız ile anında indirme hakkı tanımlandı!")
 
 @bot.message_handler(func=lambda m: True)
 def handle_link_and_security(message):
@@ -446,7 +416,7 @@ def handle_link_and_security(message):
         elif target_platform == "insta" and "instagram.com" not in raw_text.lower():
             bot.reply_to(message, "❌ Bu özellik yalnızca Instagram bağlantıları için geçerlidir!")
             return
-        elif target_platform in ["uzun", "shorts"] and "youtube.com" not in raw_text.lower() and "youtu.be" not in raw_text.lower():
+    elif target_platform in ["uzun", "shorts"] and "youtube.com" not in raw_text.lower() and "youtu.be" not in raw_text.lower():
             bot.reply_to(message, "❌ Bu özellik yalnızca YouTube bağlantıları için geçerlidir!")
             return
 
