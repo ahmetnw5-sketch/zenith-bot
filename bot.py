@@ -214,7 +214,6 @@ def callback_handler(call):
         link = link_data["link"]
         is_audio = (data == "dl_audio")
         
-        # Dosya uzantı çakışmalarını önlemek için rastgele ID ekleyelim
         rand_id = random.randint(1000, 9999)
         output = f"aud_{user_id}_{rand_id}.m4a" if is_audio else f"vid_{user_id}_{rand_id}.mp4"
         
@@ -237,7 +236,6 @@ def callback_handler(call):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
 
-            # İndirilen doğru dosyayı bul
             actual_file = output
             if not os.path.exists(actual_file):
                 for file in os.listdir('.'):
@@ -265,7 +263,6 @@ def callback_handler(call):
             except:
                 bot.send_message(chat_id, f"❌ İndirme hatası: {str(e)[:60]}")
             
-            # Artık kalan dosya varsa temizle
             for file in os.listdir('.'):
                 if f"{user_id}_{rand_id}" in file:
                     try:
@@ -299,7 +296,7 @@ def handle_link(message):
     if any(swear in text_lower for swear in SWEAR_WORDS):
         if user_id not in user_swear_counts: user_swear_counts[user_id] = 0
         user_swear_counts[user_id] += 1
-        bot.reply_to(message, f"⚠️️ **Küfür Uyarısı ({user_swear_counts[user_id]}/3)**")
+        bot.reply_to(message, f"⚠️ **Küfür Uyarısı ({user_swear_counts[user_id]}/3)**")
         return
         
     current_state = user_states.get(user_id)
@@ -338,3 +335,4 @@ def handle_link(message):
     bot.send_message(chat_id, get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
 
 bot.infinity_polling()
+    
