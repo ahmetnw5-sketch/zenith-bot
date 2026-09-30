@@ -15,12 +15,11 @@ unlocked_platforms = {}
 user_languages = {} 
 pending_links = {}  
 fast_downloads = {} 
-user_swear_counts = {} # Küfür takibi için
+user_swear_counts = {}
 
 daily_winners = {}  
 last_reward_date = ""
 
-# Platform bazlı maksimum toplu link sınırları
 PLATFORM_LIMITS = {
     "uzun": 20,
     "shorts": 30,
@@ -28,7 +27,6 @@ PLATFORM_LIMITS = {
     "insta": 30
 }
 
-# Küfür filtre kelimeleri (İstediğin gibi çoğaltabilirsin)
 SWEAR_WORDS = ["amk", "aq", "orospu", "piç", "sik", "anan", "amina", "amcık", "mal", "salak"]
 
 ALL_LANGUAGES = [
@@ -126,7 +124,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Only for YouTube Shorts!",
         "err_tiktok": "❌ Only for TikTok!",
         "err_insta": "❌ Only for Instagram!",
-        "limit_exceeded": "⚠️ **Limit Exceeded!**",
+        "limit_exceeded": "⚠️️ **Limit Exceeded!**",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -272,7 +270,7 @@ def callback_handler(call):
     user_id = call.from_user.id
     chat_id = call.message.chat.id
     data = call.data
-    user_display_name = call.from_user.first_name or message.from_user.username or "Dostum"
+    user_display_name = call.from_user.first_name or call.from_user.username or "Dostum"
     
     if data == "open_profile":
         bot.answer_callback_query(call.id)
@@ -436,7 +434,26 @@ def callback_handler(call):
     if user_id == ADMIN_ID and data.startswith("unlock_"):
         p_key = data.replace("unlock_", "").replace("yt_", "")
         user_states[user_id] = f"waiting_for_{p_key}"
-        bot.answer_callback_query(call.id, f"👑 Admin: {p_key} açıldı!")
+        bot.answer_callback_query(call.id)
+        m = InlineKeyboardMarkup()
+        m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text=profile_text, reply_markup=m, parse_mode="Markdown")
+        return
+
+    if data == "open_language_menu":
+        bot.answer_callback_query(call.id)
+        m = InlineKeyboardMarkup(row_width=1)
+        m.add(*(InlineKeyboardButton(name, callback_data=f"set_lang_{code}") for name, code in ALL_LANGUAGES))
+        m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "lang_select"), reply_markup=m, parse_mode="Markdown")
+        return
+
+    if data.startswith("set_lang_"):
+        lang_code = data.split("_")[2]
+        user_languages[user_id] = lang_code
+        bot.answer_callback_query(call.id, f"✅ Dil: {lang_code.upper()}")
+        txt = get_text(user_id, "welcome", name=user_display_name)
+        if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
         bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
         return
 
@@ -560,8 +577,10 @@ def callback_handler(call):
     if user_id == ADMIN_ID and data.startswith("unlock_"):
         p_key = data.replace("unlock_", "").replace("yt_", "")
         user_states[user_id] = f"waiting_for_{p_key}"
-        bot.answer_callback_query(call.id, f"👑 Admin: {p_key} açıldı!")
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt", p_key=p_key), parse_mode="Markdown")
+        bot.answer_callback_query(call.id)
+        m = InlineKeyboardMarkup()
+        m.add(InlineKeyboardButton(get_text(user_id, "back_menu"), callback_data="back_to_main"))
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt", p_key=p_key), reply_markup=m, parse_mode="Markdown")
         return
 
     payloads = {"unlock_yt_uzun": "uzun", "unlock_yt_shorts": "shorts", "unlock_tiktok": "tiktok", "unlock_insta": "insta"}
@@ -600,17 +619,13 @@ def handle_link(message):
     if raw_text.startswith("/"):
         return
 
-    # KÜFÜR VE HAKARET KONTROLÜ (3 defa küfür ederse hakları sıfırlanır ve engellenir)
     text_lower = raw_text.lower()
     if any(swear in text_lower for swear in SWEAR_WORDS):
         if user_id not in user_swear_counts:
             user_swear_counts[user_id] = 0
         user_swear_counts[user_id] += 1
         
-        remaining_warnings = 3 - user_swear_counts[user_id]
-        
         if user_swear_counts[user_id] >= 3:
-            # Hakları sıfırla
             if user_id in unlocked_platforms:
                 unlocked_platforms[user_id] = {}
             bot.reply_to(message, "🚨 **Cezalandırıldınız!** 3 kez küfür/hakaret ettiğiniz tespit edildi. Tüm VIP haklarınız sıfırlandı ve sisteme mesaj atmanız kısıtlandı!")
