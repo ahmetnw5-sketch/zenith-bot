@@ -23,7 +23,7 @@ last_reward_date = ""
 PLATFORM_LIMITS = {
     "uzun": 20,
     "shorts": 30,
-    "tiktok": 64,  # İstediğin gibi TikTok için 64 sınır eklendi!
+    "tiktok": 64,  
     "insta": 30
 }
 
@@ -56,7 +56,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Bu seçenek sadece **YouTube Shorts** içindir!",
         "err_tiktok": "❌ Bu seçenek sadece **TikTok** bağlantısı olmalıdır!",
         "err_insta": "❌ Bu seçenek sadece **Instagram** bağlantısı olmalıdır!",
-        "limit_exceeded": "⚠️️ **Sınır Aşıldı!** Bu platform için tek seferde en fazla **{limit}** adet link gönderebilirsin.",
+        "limit_exceeded": "⚠ **Sınır Aşıldı!** Bu platform için tek seferde en fazla **{limit}** adet link gönderebilirsin.",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
@@ -143,7 +143,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ ليوتيوب شورتس فقط!",
         "err_tiktok": "❌ لتيك توك فقط!",
         "err_insta": "❌ لإنستغرام فقط!",
-        "limit_exceeded": "⚠️️ **تم تجاوز الحد!** يمكنك إرسال كحد أقصى **{limit}** روابط دفعة واحدة.",
+        "limit_exceeded": "⚠ **تم تجاوز الحد!** يمكنك إرسال كحد أقصى **{limit}** روابط دفعة واحدة.",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -166,7 +166,7 @@ TRANSLATIONS = {
         "admin_prompt": "👑 **Admin:** Salgylary ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
         "fast_payment_success": "⚡ Çalt ýükleme işjeňleşdirildi!",
-        "no_rights": "⚠️️ Ygtyýaryňyz ýok.",
+        "no_rights": "⚠ Ygtyýaryňyz ýok.",
         "expired": "⏳ Wagtyňyz gutardy.",
         "err_uzun": "❌ Diňe uzyn wideolar üçin!",
         "err_shorts": "❌ Diňe Shorts üçin!",
@@ -473,7 +473,6 @@ def handle_link(message):
 
     current_state = user_states.get(user_id)
     
-    # Platform tespiti ve sınır kontrolü
     detected_platform = ""
     if current_state:
         for p in ["uzun", "shorts", "tiktok", "insta"]:
