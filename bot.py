@@ -1,6 +1,7 @@
 import os
 import time
 import datetime
+import random
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, LabeledPrice
 import yt_dlp
@@ -15,9 +16,16 @@ user_languages = {}
 pending_links = {}  
 fast_downloads = {} 
 
-# Günlük ödül sistemi için değişkenler
 daily_winners = {}  
 last_reward_date = ""
+
+# Platform bazlı maksimum toplu link sınırları
+PLATFORM_LIMITS = {
+    "uzun": 20,
+    "shorts": 30,
+    "tiktok": 64,  # İstediğin gibi TikTok için 64 sınır eklendi!
+    "insta": 30
+}
 
 ALL_LANGUAGES = [
     ("🇹🇷 Türkçe", "tr"), 
@@ -29,7 +37,7 @@ ALL_LANGUAGES = [
 
 TRANSLATIONS = {
     "tr": {
-        "welcome": "🤖 **Video İndirici Botuna Hoş Geldin!**\n\nİşlem yapmak istediğin seçeneğe tıkla:",
+        "welcome": "🤖 **Selam {name}, Video İndirici Botuna Hoş Geldin!**\n\nİşlem yapmak istediğin seçeneğe tıkla:",
         "admin_active": "\n\n👑 *Admin Paneli Aktif!*",
         "btn_uzun": "🎬 YouTube Uzun (150 Yıldız) - 5200 Hak",
         "btn_shorts": "📱 YouTube Shorts (150 Yıldız) - 5200 Hak",
@@ -48,6 +56,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Bu seçenek sadece **YouTube Shorts** içindir!",
         "err_tiktok": "❌ Bu seçenek sadece **TikTok** bağlantısı olmalıdır!",
         "err_insta": "❌ Bu seçenek sadece **Instagram** bağlantısı olmalıdır!",
+        "limit_exceeded": "⚠️️ **Sınır Aşıldı!** Bu platform için tek seferde en fazla **{limit}** adet link gönderebilirsin.",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
@@ -57,7 +66,7 @@ TRANSLATIONS = {
         "start_fallback": "Lütfen `/start` yazıp menüden seçim yap."
     },
     "ku": {
-        "welcome": "🤖 **Bi xêr hatî Botê Daxistina Vîdyoyan!**",
+        "welcome": "🤖 **Silav {name}, Bi xêr hatî Botê Daxistina Vîdyoyan!**",
         "admin_active": "\n\n👑 *Panela Admin Çalak e!*",
         "btn_uzun": "🎬 Vîdyoya Dirêj a YouTube",
         "btn_shorts": "📱 YouTube Shorts",
@@ -76,6 +85,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Tenê ji bo YouTube Shorts!",
         "err_tiktok": "❌ Tenê ji bo TikTok!",
         "err_insta": "❌ Tenê ji bo Instagram!",
+        "limit_exceeded": "⚠️ **Sînor derbas bû!** Ji bo vê platformê herî زor **{limit}** lînkan dikarî bişînî.",
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 Pelê deng Daxîne",
@@ -85,7 +95,7 @@ TRANSLATIONS = {
         "start_fallback": "Ji kerema xwe `/start` binivîse."
     },
     "en": {
-        "welcome": "🤖 **Welcome to Video Downloader Bot!**",
+        "welcome": "🤖 **Hello {name}, Welcome to Video Downloader Bot!**",
         "admin_active": "\n\n👑 *Admin Panel Active!*",
         "btn_uzun": "🎬 YouTube Long Video",
         "btn_shorts": "📱 YouTube Shorts",
@@ -104,6 +114,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Only for YouTube Shorts!",
         "err_tiktok": "❌ Only for TikTok!",
         "err_insta": "❌ Only for Instagram!",
+        "limit_exceeded": "⚠️ **Limit Exceeded!** You can send a maximum of **{limit}** links at once for this platform.",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -113,7 +124,7 @@ TRANSLATIONS = {
         "start_fallback": "Please type `/start`."
     },
     "ar": {
-        "welcome": "🤖 **مرحباً بك في بوت تحميل الفيديو!**",
+        "welcome": "🤖 **مرحباً {name}، أهلاً بك في بوت تحميل الفيديو!**",
         "admin_active": "\n\n👑 *لوحة المشرف نشطة!*",
         "btn_uzun": "🎬 فيديو يوتيوب طويل",
         "btn_shorts": "📱 يوتيوب شورتس",
@@ -132,6 +143,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ ليوتيوب شورتس فقط!",
         "err_tiktok": "❌ لتيك توك فقط!",
         "err_insta": "❌ لإنستغرام فقط!",
+        "limit_exceeded": "⚠️️ **تم تجاوز الحد!** يمكنك إرسال كحد أقصى **{limit}** روابط دفعة واحدة.",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -141,7 +153,7 @@ TRANSLATIONS = {
         "start_fallback": "يرجى كتابة `/start`."
     },
     "tk": {
-        "welcome": "🎨 **Wideo ýükleýji bota hoş geldiňiz!**",
+        "welcome": "🎨 **Salam {name}, Wideo ýükleýji bota hoş geldiňiz!**",
         "admin_active": "\n\n👑 *Admin paneli işjeň!*",
         "btn_uzun": "🎬 YouTube Uzyn Wideo",
         "btn_shorts": "📱 YouTube Shorts",
@@ -154,12 +166,13 @@ TRANSLATIONS = {
         "admin_prompt": "👑 **Admin:** Salgylary ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
         "fast_payment_success": "⚡ Çalt ýükleme işjeňleşdirildi!",
-        "no_rights": "⚠️ Ygtyýaryňyz ýok.",
+        "no_rights": "⚠️️ Ygtyýaryňyz ýok.",
         "expired": "⏳ Wagtyňyz gutardy.",
         "err_uzun": "❌ Diňe uzyn wideolar üçin!",
         "err_shorts": "❌ Diňe Shorts üçin!",
         "err_tiktok": "❌ Diňe TikTok üçin!",
         "err_insta": "❌ Diňe Instagram üçin!",
+        "limit_exceeded": "⚠️ **Çäk aşyldy!** Bir gezekde iň köp **{limit}** sany baglanyşyk iberip bilersiňiz.",
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
         "btn_audio": "🎵 MP3",
@@ -170,10 +183,13 @@ TRANSLATIONS = {
     }
 }
 
-def get_text(user_id, key):
+def get_text(user_id, key, **kwargs):
     lang = user_languages.get(user_id, "tr")
     if lang not in TRANSLATIONS: lang = "tr"
-    return TRANSLATIONS[lang].get(key, TRANSLATIONS["tr"].get(key, ""))
+    text = TRANSLATIONS[lang].get(key, TRANSLATIONS["tr"].get(key, ""))
+    if kwargs:
+        return text.format(**kwargs)
+    return text
 
 def get_main_keyboard(user_id):
     m = InlineKeyboardMarkup(row_width=1)
@@ -194,6 +210,8 @@ def send_welcome(message):
     chat_id = message.chat.id
     user_states[user_id] = None
     
+    user_display_name = message.from_user.first_name or "Dostum"
+    
     now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
     current_date_str = now_tr.strftime("%Y-%m-%d")
     current_hour = now_tr.hour
@@ -207,7 +225,6 @@ def send_welcome(message):
     today_list = daily_winners.get(current_date_str, [])
     
     if current_hour == 13 and 0 <= current_minute <= 5 and user_id not in today_list and len(today_list) < 3:
-        import random
         platforms = ["uzun", "shorts", "tiktok", "insta"]
         chosen_platform = random.choice(platforms)
         random_days = random.randint(7, 14)
@@ -233,7 +250,7 @@ def send_welcome(message):
             f"*(Profilinden detayları görebilirsin!)* 🎉\n"
         )
 
-    txt = get_text(user_id, "welcome") + reward_message
+    txt = get_text(user_id, "welcome", name=user_display_name) + reward_message
     if user_id == ADMIN_ID: 
         txt += get_text(user_id, "admin_active")
         
@@ -244,6 +261,7 @@ def callback_handler(call):
     user_id = call.from_user.id
     chat_id = call.message.chat.id
     data = call.data
+    user_display_name = call.from_user.first_name or "Dostum"
     
     if data == "open_profile":
         bot.answer_callback_query(call.id)
@@ -282,7 +300,7 @@ def callback_handler(call):
         lang_code = data.split("_")[2]
         user_languages[user_id] = lang_code
         bot.answer_callback_query(call.id, f"✅ Dil: {lang_code.upper()}")
-        txt = get_text(user_id, "welcome")
+        txt = get_text(user_id, "welcome", name=user_display_name)
         if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
         bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
         return
@@ -290,7 +308,7 @@ def callback_handler(call):
     if data == "back_to_main":
         bot.answer_callback_query(call.id)
         user_states[user_id] = None
-        txt = get_text(user_id, "welcome")
+        txt = get_text(user_id, "welcome", name=user_display_name)
         if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
         bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
         return
@@ -321,7 +339,7 @@ def callback_handler(call):
         
         p_type = next((k for k in ["uzun", "shorts", "tiktok", "insta"] if k in current_state), "")
 
-        for index, link in enumerate(links[:999], 1):
+        for index, link in enumerate(links, 1):
             if user_id != ADMIN_ID and p_type:
                 if user_id not in unlocked_platforms or p_type not in unlocked_platforms[user_id]:
                     bot.send_message(chat_id, get_text(user_id, "no_rights"))
@@ -408,7 +426,7 @@ def callback_handler(call):
         p_key = data.replace("unlock_", "").replace("yt_", "")
         user_states[user_id] = f"waiting_for_{p_key}"
         bot.answer_callback_query(call.id, f"👑 Admin: {p_key} açıldı!")
-        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt").format(p_key=p_key), parse_mode="Markdown")
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt", p_key=p_key), parse_mode="Markdown")
         return
 
     payloads = {"unlock_yt_uzun": "uzun", "unlock_yt_shorts": "shorts", "unlock_tiktok": "tiktok", "unlock_insta": "insta"}
@@ -454,7 +472,22 @@ def handle_link(message):
         return
 
     current_state = user_states.get(user_id)
-    for text in links[:999]:
+    
+    # Platform tespiti ve sınır kontrolü
+    detected_platform = ""
+    if current_state:
+        for p in ["uzun", "shorts", "tiktok", "insta"]:
+            if p in current_state:
+                detected_platform = p
+                break
+
+    if detected_platform and detected_platform in PLATFORM_LIMITS:
+        max_limit = PLATFORM_LIMITS[detected_platform]
+        if len(links) > max_limit:
+            bot.send_message(chat_id, get_text(user_id, "limit_exceeded", limit=max_limit), parse_mode="Markdown")
+            return
+
+    for text in links:
         text_lower = text.lower()
         is_valid, error_msg = True, ""
         
@@ -475,12 +508,12 @@ def handle_link(message):
             bot.send_message(chat_id, error_msg, parse_mode="Markdown")
             return
 
-    pending_links[user_id] = {"links": links[:999]}
+    pending_links[user_id] = {"links": links}
     format_markup = InlineKeyboardMarkup(row_width=2)
     format_markup.add(
         InlineKeyboardButton(get_text(user_id, "btn_video"), callback_data="dl_video"),
         InlineKeyboardButton(get_text(user_id, "btn_audio"), callback_data="dl_audio")
     )
-    bot.send_message(chat_id, f"📥 {len(links[:999])} adet bağlantı alındı!\n\n" + get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
+    bot.send_message(chat_id, f"📥 {len(links)} adet bağlantı alındı!\n\n" + get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
 
-bot.infinity_polling(skip_pending=True)
+bot.infinity_polling(skip_pending=True, none_stop
