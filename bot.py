@@ -32,12 +32,10 @@ ALL_LANGUAGES = [
 TRANSLATIONS = {
     "tr": {
         "welcome": (
-            "⚡ **Zenith İndirme Botuna Hoş Geldiniz!**\n\n"
-            "Versiyon **2.8.4.7** sürümüyle karşınızdayız! Bu botumuz tamamen filigransız ve hızlı videolar indirmeniz için tasarlandı.\n\n"
+            "⚡ **Zenith İndirme Botuna Hoş Geldin Reisim!**\n\n"
+            "Versiyon **2.8.4.8** - Hatalar arındırıldı, filtreler tam gaz aktif!\n\n"
             "🎯 **Nasıl Kullanılır?**\n"
-            "İstediğiniz platform butonuna tıklayın, ardından indirmek istediğiniz videonun bağlantısını (linkini) bize gönderin. Saniyeler içinde videonuzu hazırlayalım!\n\n"
-            "⚠️ **Önemli Kurallar & Uyarı:**\n"
-            "Bota üst üste küfür veya hakaret atıldığı tespit edilirse sistem otomatik olarak sizi engeller ve tüm VIP / indirme haklarınız sıfırlanır. Lütfen saygı çerçevesinde kalın.\n\n"
+            "Önce aşağıdan indirmek istediğin platform butonuna tıkla, ardından linkini gönder.\n\n"
             "Selam **{name}**, işlem yapmak istediğin seçeneğe tıkla:"
         ),
         "admin_active": "\n\n👑 *Admin Paneli Aktif!*",
@@ -49,9 +47,10 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Dil Seç / Language",
         "lang_select": "🌐 **Lütfen kullanmak istediğin dili seç:**",
         "back_menu": "🔙 Ana Menüye Dön",
-        "admin_prompt": "👑 **{p_key}** menüsündesin. Lütfen bu platforma ait geçerli bir bağlantı gönder:",
+        "admin_prompt": "👑 **{p_key}** menüsündesin. Şimdi bu platforma ait bağlantıyı gönder:",
         "payment_success": "🎉 Ödeme başarılı! 18.753 indirme hakkın tanımlandı.",
-        "err_platform": "❌ **Yanlış Platform!** Şu an `{current_menu}` menüsündesin. Lütfen bu platforma uygun bir bağlantı gönder.",
+        "err_platform": "❌ **HATA: Yanlış Platform Linki!**\n\nŞu an **{current_menu}** menüsündesin ama farklı bir platformun bağlantısını attın. Lütfen menüye uygun link gönder!",
+        "err_no_menu": "⚠️ **Önce Menü Seçmelisin!**\n\nDoğrudan link atamazsın reisim. Önce ana menüden ilgili platform butonuna tıkla, ardından linki gönder.",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
@@ -70,6 +69,7 @@ TRANSLATIONS = {
         "admin_prompt": "👑 Lînka **{p_key}** bişîne:",
         "payment_success": "🎉 Dravdan serketî bû!",
         "err_platform": "❌ **Platforma Çewt!**",
+        "err_no_menu": "⚠️ Pêşî menu hilbijêre!",
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 Pelê deng Daxîne",
@@ -88,6 +88,7 @@ TRANSLATIONS = {
         "admin_prompt": "👑 Send valid **{p_key}** link:",
         "payment_success": "🎉 Payment successful!",
         "err_platform": "❌ **Wrong Platform!**",
+        "err_no_menu": "⚠️ Please select a menu first!",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -106,6 +107,7 @@ TRANSLATIONS = {
         "admin_prompt": "👑 أرسل رابط **{p_key}** صحيح:",
         "payment_success": "🎉 نجح الدفع!",
         "err_platform": "❌ **منصة خاطئة!**",
+        "err_no_menu": "⚠️ اختر القائمة أولاً!",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -123,6 +125,8 @@ TRANSLATIONS = {
         "back_menu": "🔙 Yzyna",
         "admin_prompt": "👑 Salgyny ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
+        "err_platform": "❌ Ýalňyş platforma!",
+        "err_no_menu": "⚠️ Ilki menu saýlaň!",
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
         "btn_audio": "🎵 MP3",
@@ -154,7 +158,7 @@ def send_welcome(message):
     global last_reward_date, daily_winners
     user_id = message.from_user.id
     chat_id = message.chat.id
-    user_states[user_id] = None
+    user_states[user_id] = None  # Start komutu state'i tamamen sıfırlar
     user_display_name = message.from_user.first_name or message.from_user.username or "Dostum"
     
     now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
@@ -332,8 +336,10 @@ def handle_link(message):
         return
         
     current_state = user_states.get(user_id)
+    
+    # KONTROL 1: Eğer kullanıcı menü seçmeden doğrudan link atarsa hata ver!
     if not current_state or not current_state.startswith("active_"):
-        bot.reply_to(message, "⚠️ Lütfen önce ana menüden işlem yapmak istediğin **platform butonuna** tıkla reisim!")
+        bot.reply_to(message, get_text(user_id, "err_no_menu"))
         return
 
     p_type = current_state.replace("active_", "")
@@ -343,9 +349,9 @@ def handle_link(message):
         bot.reply_to(message, "⚠️ Lütfen geçerli bir video bağlantısı (linki) gönderin.")
         return
 
-    # KESİN PLATFORM EŞLEŞME KONTROLÜ (YANLIŞ MENÜDE YANLIŞ LİNKE HATA VERİR)
+    # KONTROL 2: KESİN PLATFORM EŞLEŞME KONTROLÜ (YANLIŞ MENÜDE YANLIŞ LİNKE KESİN HATA VERİR)
     is_tiktok = "tiktok.com" in link or "vm.tiktok.com" in link or "vt.tiktok.com" in link
-    is_insta = "instagram.com" in link
+    is_insta = "instagram.com" in link or "instagr.am" in link
     is_yt = "youtube.com" in link or "youtu.be" in link
 
     target_match = True
@@ -366,3 +372,4 @@ def handle_link(message):
     bot.send_message(chat_id, get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
 
 bot.infinity_polling()
+    
