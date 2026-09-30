@@ -49,8 +49,9 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Dil Seç / Language",
         "lang_select": "🌐 **Lütfen kullanmak istediğin dili seç:**",
         "back_menu": "🔙 Ana Menüye Dön",
-        "admin_prompt": "👑 **{p_key}** menüsündesin. Lütfen indirmek istediğin bağlantıyı gönder:",
+        "admin_prompt": "👑 **{p_key}** menüsündesin. Lütfen bu platforma ait geçerli bir bağlantı gönder:",
         "payment_success": "🎉 Ödeme başarılı! 18.753 indirme hakkın tanımlandı.",
+        "err_platform": "❌ **Yanlış Platform!** Şu an `{current_menu}` menüsündesin. Lütfen bu platforma uygun bir bağlantı gönder.",
         "choose_format": "📥 **Nasıl indirmek istiyorsun?**",
         "btn_video": "🎥 Video İndir",
         "btn_audio": "🎵 MP3 İndir",
@@ -66,8 +67,9 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Ziman / Dil",
         "lang_select": "🌐 **Ji kerema xwe zimanê xwe hilbijêre:**",
         "back_menu": "🔙 Vegere Menuya Sereke",
-        "admin_prompt": "👑 Lînka xwe bişîne:",
+        "admin_prompt": "👑 Lînka **{p_key}** bişîne:",
         "payment_success": "🎉 Dravdan serketî bû!",
+        "err_platform": "❌ **Platforma Çewt!**",
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 Pelê deng Daxîne",
@@ -83,8 +85,9 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Language",
         "lang_select": "🌐 **Please select your language:**",
         "back_menu": "🔙 Back to Main Menu",
-        "admin_prompt": "👑 Send your link:",
+        "admin_prompt": "👑 Send valid **{p_key}** link:",
         "payment_success": "🎉 Payment successful!",
+        "err_platform": "❌ **Wrong Platform!**",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -100,8 +103,9 @@ TRANSLATIONS = {
         "btn_lang": "🌐 اللغة",
         "lang_select": "🌐 **يرجى اختيار لغتك:**",
         "back_menu": "🔙 العودة للقائمة الرئيسية",
-        "admin_prompt": "👑 أرسل الرابط:",
+        "admin_prompt": "👑 أرسل رابط **{p_key}** صحيح:",
         "payment_success": "🎉 نجح الدفع!",
+        "err_platform": "❌ **منصة خاطئة!**",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -327,13 +331,32 @@ def handle_link(message):
         bot.reply_to(message, f"⚠️ **Küfür Uyarısı ({user_swear_counts[user_id]}/3)**")
         return
         
+    current_state = user_states.get(user_id)
+    if not current_state or not current_state.startswith("active_"):
+        bot.reply_to(message, "⚠️ Lütfen önce ana menüden işlem yapmak istediğin **platform butonuna** tıkla reisim!")
+        return
+
+    p_type = current_state.replace("active_", "")
+    
     link = next((line.strip() for line in raw_text.splitlines() if line.strip().startswith("http")), None)
     if not link:
         bot.reply_to(message, "⚠️ Lütfen geçerli bir video bağlantısı (linki) gönderin.")
         return
 
-    # KANAL ZORUNLULUĞU VEYA PLATFORM HATASI TAMAMEN KALdirILDI:
-    # Hangi menüde olursan ol veya hangi linki atarsan at doğrudan format seçimine yönlendirilir.
+    # KESİN PLATFORM EŞLEŞME KONTROLÜ (YANLIŞ MENÜDE YANLIŞ LİNKE HATA VERİR)
+    is_tiktok = "tiktok.com" in link or "vm.tiktok.com" in link or "vt.tiktok.com" in link
+    is_insta = "instagram.com" in link
+    is_yt = "youtube.com" in link or "youtu.be" in link
+
+    target_match = True
+    if p_type == "tiktok" and not is_tiktok: target_match = False
+    if p_type == "insta" and not is_insta: target_match = False
+    if (p_type == "uzun" or p_type == "shorts") and not is_yt: target_match = False
+
+    if not target_match and user_id != ADMIN_ID:
+        bot.reply_to(message, get_text(user_id, "err_platform", current_menu=p_type.upper()))
+        return
+
     pending_links[user_id] = {"link": link}
     format_markup = InlineKeyboardMarkup(row_width=2)
     format_markup.add(
