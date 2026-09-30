@@ -15,6 +15,7 @@ unlocked_platforms = {}
 user_languages = {} 
 pending_links = {}  
 fast_downloads = {} 
+user_swear_counts = {} # Küfür takibi için
 
 daily_winners = {}  
 last_reward_date = ""
@@ -27,6 +28,9 @@ PLATFORM_LIMITS = {
     "insta": 30
 }
 
+# Küfür filtre kelimeleri (İstediğin gibi çoğaltabilirsin)
+SWEAR_WORDS = ["amk", "aq", "orospu", "piç", "sik", "anan", "amina", "amcık", "mal", "salak"]
+
 ALL_LANGUAGES = [
     ("🇹🇷 Türkçe", "tr"), 
     ("☀️ Kürtçe (Kurmancî)", "ku"), 
@@ -37,7 +41,15 @@ ALL_LANGUAGES = [
 
 TRANSLATIONS = {
     "tr": {
-        "welcome": "🤖 **Selam {name}, Video İndirici Botuna Hoş Geldin!**\n\nİşlem yapmak istediğin seçeneğe tıkla:",
+        "welcome": (
+            "⚡ **Zenith İndirme Botuna Hoş Geldiniz!**\n\n"
+            "Versiyon **2.8.4.6** sürümüyle karşınızdayız! Bu botumuz tamamen filigransız ve hızlı videolar indirmeniz için tasarlandı.\n\n"
+            "🎯 **Nasıl Kullanılır?**\n"
+            "İstediğiniz platform butonuna tıklayın, ardından indirmek istediğiniz videonun bağlantısını (linkini) bize gönderin. Saniyeler içinde videonuzu hazırlayalım!\n\n"
+            "⚠️ **Önemli Kurallar & Uyarı:**\n"
+            "Bota üst üste küfür veya hakaret atıldığı tespit edilirse sistem otomatik olarak sizi engeller ve tüm VIP / indirme haklarınız sıfırlanır. Lütfen saygı çerçevesinde kalın.\n\n"
+            "Selam **{name}**, işlem yapmak istediğin seçeneğe tıkla:"
+        ),
         "admin_active": "\n\n👑 *Admin Paneli Aktif!*",
         "btn_uzun": "🎬 YouTube Uzun (150 Yıldız) - 5200 Hak",
         "btn_shorts": "📱 YouTube Shorts (150 Yıldız) - 5200 Hak",
@@ -66,7 +78,7 @@ TRANSLATIONS = {
         "start_fallback": "Lütfen `/start` yazıp menüden seçim yap."
     },
     "ku": {
-        "welcome": "🤖 **Silav {name}, Bi xêr hatî Botê Daxistina Vîdyoyan!**",
+        "welcome": "🤖 **Silav {name}, Bi xêr hatî Botê Daxistina Vîdyoyan (Zenith v2.8.4.6)!**",
         "admin_active": "\n\n👑 *Panela Admin Çalak e!*",
         "btn_uzun": "🎬 Vîdyoya Dirêj a YouTube",
         "btn_shorts": "📱 YouTube Shorts",
@@ -85,7 +97,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Tenê ji bo YouTube Shorts!",
         "err_tiktok": "❌ Tenê ji bo TikTok!",
         "err_insta": "❌ Tenê ji bo Instagram!",
-        "limit_exceeded": "⚠️ **Sînor derbas bû!** Ji bo vê platformê herî زor **{limit}** lînkan dikarî bişînî.",
+        "limit_exceeded": "⚠️ **Sînor derbas bû!**",
         "choose_format": "📥 **Çawa dixwazî daxistinê bikî?**",
         "btn_video": "🎥 Vîdyo Daxîne",
         "btn_audio": "🎵 Pelê deng Daxîne",
@@ -95,7 +107,7 @@ TRANSLATIONS = {
         "start_fallback": "Ji kerema xwe `/start` binivîse."
     },
     "en": {
-        "welcome": "🤖 **Hello {name}, Welcome to Video Downloader Bot!**",
+        "welcome": "⚡ **Hello {name}, Welcome to Zenith Downloader Bot (v2.8.4.6)!**",
         "admin_active": "\n\n👑 *Admin Panel Active!*",
         "btn_uzun": "🎬 YouTube Long Video",
         "btn_shorts": "📱 YouTube Shorts",
@@ -114,7 +126,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Only for YouTube Shorts!",
         "err_tiktok": "❌ Only for TikTok!",
         "err_insta": "❌ Only for Instagram!",
-        "limit_exceeded": "⚠️ **Limit Exceeded!** You can send a maximum of **{limit}** links at once for this platform.",
+        "limit_exceeded": "⚠️ **Limit Exceeded!**",
         "choose_format": "📥 **How do you want to download?**",
         "btn_video": "🎥 Download Video",
         "btn_audio": "🎵 Download MP3",
@@ -124,7 +136,7 @@ TRANSLATIONS = {
         "start_fallback": "Please type `/start`."
     },
     "ar": {
-        "welcome": "🤖 **مرحباً {name}، أهلاً بك في بوت تحميل الفيديو!**",
+        "welcome": "⚡ **مرحباً {name}، أهلاً بك في بوت تحميل Zenith (v2.8.4.6)!**",
         "admin_active": "\n\n👑 *لوحة المشرف نشطة!*",
         "btn_uzun": "🎬 فيديو يوتيوب طويل",
         "btn_shorts": "📱 يوتيوب شورتس",
@@ -143,7 +155,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ ليوتيوب شورتس فقط!",
         "err_tiktok": "❌ لتيك توك فقط!",
         "err_insta": "❌ لإنستغرام فقط!",
-        "limit_exceeded": "⚠ **تم تجاوز الحد!** يمكنك إرسال كحد أقصى **{limit}** روابط دفعة واحدة.",
+        "limit_exceeded": "⚠ **تم تجاوز الحد!**",
         "choose_format": "📥 **كيف تريد التنزيل؟**",
         "btn_video": "🎥 تنزيل فيديو",
         "btn_audio": "🎵 تنزيل MP3",
@@ -153,7 +165,7 @@ TRANSLATIONS = {
         "start_fallback": "يرجى كتابة `/start`."
     },
     "tk": {
-        "welcome": "🎨 **Salam {name}, Wideo ýükleýji bota hoş geldiňiz!**",
+        "welcome": "⚡ **Salam {name}, Zenith Wideo ýükleýji bota hoş geldiňiz (v2.8.4.6)!**",
         "admin_active": "\n\n👑 *Admin paneli işjeň!*",
         "btn_uzun": "🎬 YouTube Uzyn Wideo",
         "btn_shorts": "📱 YouTube Shorts",
@@ -172,7 +184,7 @@ TRANSLATIONS = {
         "err_shorts": "❌ Diňe Shorts üçin!",
         "err_tiktok": "❌ Diňe TikTok üçin!",
         "err_insta": "❌ Diňe Instagram üçin!",
-        "limit_exceeded": "⚠️ **Çäk aşyldy!** Bir gezekde iň köp **{limit}** sany baglanyşyk iberip bilersiňiz.",
+        "limit_exceeded": "⚠️ **Çäk aşyldy!**",
         "choose_format": "📥 **Nädip ýükletmeli?**",
         "btn_video": "🎥 Wideo",
         "btn_audio": "🎵 MP3",
@@ -210,7 +222,7 @@ def send_welcome(message):
     chat_id = message.chat.id
     user_states[user_id] = None
     
-    user_display_name = message.from_user.first_name or "Dostum"
+    user_display_name = message.from_user.first_name or message.from_user.username or "Dostum"
     
     now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
     current_date_str = now_tr.strftime("%Y-%m-%d")
@@ -247,7 +259,6 @@ def send_welcome(message):
             f"✨ **Hediye Paket:** {p_names[chosen_platform]}\n"
             f"⏳ **Süre:** {random_days} Gün\n"
             f"🎯 **Hak:** {random_hak} Adet\n"
-            f"*(Profilinden detayları görebilirsin!)* 🎉\n"
         )
 
     txt = get_text(user_id, "welcome", name=user_display_name) + reward_message
@@ -261,7 +272,7 @@ def callback_handler(call):
     user_id = call.from_user.id
     chat_id = call.message.chat.id
     data = call.data
-    user_display_name = call.from_user.first_name or "Dostum"
+    user_display_name = call.from_user.first_name or message.from_user.username or "Dostum"
     
     if data == "open_profile":
         bot.answer_callback_query(call.id)
@@ -426,6 +437,130 @@ def callback_handler(call):
         p_key = data.replace("unlock_", "").replace("yt_", "")
         user_states[user_id] = f"waiting_for_{p_key}"
         bot.answer_callback_query(call.id, f"👑 Admin: {p_key} açıldı!")
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
+        return
+
+    if data == "back_to_main":
+        bot.answer_callback_query(call.id)
+        user_states[user_id] = None
+        txt = get_text(user_id, "welcome", name=user_display_name)
+        if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
+        return
+
+    if data == "fast_download_invoice":
+        bot.answer_callback_query(call.id)
+        bot.send_invoice(
+            chat_id=chat_id,
+            title="Hızlı İndirme",
+            description="7 Yıldız ile Anında İndir",
+            invoice_payload="fast_download_boost",
+            provider_token="",
+            currency="XTR",
+            prices=[LabeledPrice("Hızlı İndir", 7)]
+        )
+        return
+
+    if data in ["dl_video", "dl_audio"]:
+        bot.answer_callback_query(call.id)
+        link_data = pending_links.get(user_id)
+        if not link_data:
+            bot.send_message(chat_id, get_text(user_id, "start_fallback"))
+            return
+        
+        links = link_data["links"]
+        is_audio = (data == "dl_audio")
+        current_state = user_states.get(user_id, "")
+        
+        p_type = next((k for k in ["uzun", "shorts", "tiktok", "insta"] if k in current_state), "")
+
+        for index, link in enumerate(links, 1):
+            if user_id != ADMIN_ID and p_type:
+                if user_id not in unlocked_platforms or p_type not in unlocked_platforms[user_id]:
+                    bot.send_message(chat_id, get_text(user_id, "no_rights"))
+                    break
+                udat = unlocked_platforms[user_id][p_type]
+                if time.time() > udat["bitis"] or udat["hak"] <= 0:
+                    bot.send_message(chat_id, get_text(user_id, "expired"))
+                    break
+                udat["hak"] -= 1
+
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton(get_text(user_id, "btn_fast"), callback_data="fast_download_invoice"))
+            
+            status_msg = bot.send_message(
+                chat_id, 
+                f"🔄 İndiriliyor: **%1**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp anında indirebilirsin!)*", 
+                reply_markup=markup, 
+                parse_mode="Markdown"
+            )
+            
+            fast_downloads[user_id] = False
+            
+            for percent in range(5, 101, 20):
+                if fast_downloads.get(user_id, False):
+                    try:
+                        bot.edit_message_text(
+                            chat_id=chat_id,
+                            message_id=status_msg.message_id,
+                            text=f"⚡ İndiriliyor: **%100**\n\n*(Hızlı indirme uygulandı!)*",
+                            parse_mode="Markdown"
+                        )
+                    except:
+                        pass
+                    break 
+                
+                time.sleep(1) 
+                try:
+                    bot.edit_message_text(
+                        chat_id=chat_id,
+                        message_id=status_msg.message_id,
+                        text=f"🔄 İndiriliyor: **%{percent}**\n\n*(Beklemek istemiyorsan aşağıdaki butona basıp anında indirebilirsin!)*",
+                        reply_markup=markup,
+                        parse_mode="Markdown"
+                    )
+                except:
+                    pass
+
+            if fast_downloads.get(user_id, False):
+                time.sleep(3)
+
+            output = f"aud_{user_id}_{index}.m4a" if is_audio else f"vid_{user_id}_{index}.mp4"
+            
+            ydl_opts = {
+                'format': 'bestaudio/best' if is_audio else 'best/bestvideo+bestaudio',
+                'outtmpl': output,
+                'noplaylist': True,
+                'socket_timeout': 60,
+                'nocheckcertificate': True
+            }
+
+            try:
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([link])
+
+                with open(output, 'rb') as f:
+                    if is_audio:
+                        bot.send_audio(chat_id, f, caption=get_text(user_id, "success_audio"), timeout=120)
+                    else:
+                        bot.send_video(chat_id, f, caption=get_text(user_id, "success_video"), timeout=120)
+                if os.path.exists(output): os.remove(output)
+            except Exception as e:
+                bot.send_message(chat_id, f"❌ Hata ({index}. link): Bu gönderi desteklenmiyor veya dosya çok büyük.")
+                if os.path.exists(output): os.remove(output)
+            
+            try: bot.delete_message(chat_id, status_msg.message_id)
+            except: pass
+            
+        pending_links.pop(user_id, None)
+        user_states[user_id] = None
+        fast_downloads.pop(user_id, None)
+        return
+
+    if user_id == ADMIN_ID and data.startswith("unlock_"):
+        p_key = data.replace("unlock_", "").replace("yt_", "")
+        user_states[user_id] = f"waiting_for_{p_key}"
+        bot.answer_callback_query(call.id, f"👑 Admin: {p_key} açıldı!")
         bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt", p_key=p_key), parse_mode="Markdown")
         return
 
@@ -464,6 +599,25 @@ def handle_link(message):
     
     if raw_text.startswith("/"):
         return
+
+    # KÜFÜR VE HAKARET KONTROLÜ (3 defa küfür ederse hakları sıfırlanır ve engellenir)
+    text_lower = raw_text.lower()
+    if any(swear in text_lower for swear in SWEAR_WORDS):
+        if user_id not in user_swear_counts:
+            user_swear_counts[user_id] = 0
+        user_swear_counts[user_id] += 1
+        
+        remaining_warnings = 3 - user_swear_counts[user_id]
+        
+        if user_swear_counts[user_id] >= 3:
+            # Hakları sıfırla
+            if user_id in unlocked_platforms:
+                unlocked_platforms[user_id] = {}
+            bot.reply_to(message, "🚨 **Cezalandırıldınız!** 3 kez küfür/hakaret ettiğiniz tespit edildi. Tüm VIP haklarınız sıfırlandı ve sisteme mesaj atmanız kısıtlandı!")
+            return
+        else:
+            bot.reply_to(message, f"⚠️ **Küfür Uyarısı ({user_swear_counts[user_id]}/3):** Botumuzda küfür etmek yasaktır! 3'e ulaşırsanız VIP haklarınız tamamen silinecektir.")
+            return
         
     links = [line.strip() for line in raw_text.splitlines() if line.strip().startswith("http")]
     
@@ -487,20 +641,20 @@ def handle_link(message):
             return
 
     for text in links:
-        text_lower = text.lower()
+        t_lower = text.lower()
         is_valid, error_msg = True, ""
         
         if current_state == "waiting_for_uzun":
-            if "youtube.com/shorts" in text_lower or ("youtube.com" not in text_lower and "youtu.be" not in text_lower):
+            if "youtube.com/shorts" in t_lower or ("youtube.com" not in t_lower and "youtu.be" not in t_lower):
                 is_valid, error_msg = False, get_text(user_id, "err_uzun")
         elif current_state == "waiting_for_shorts":
-            if "youtube.com/shorts" not in text_lower:
+            if "youtube.com/shorts" not in t_lower:
                 is_valid, error_msg = False, get_text(user_id, "err_shorts")
         elif current_state == "waiting_for_tiktok":
-            if "tiktok.com" not in text_lower:
+            if "tiktok.com" not in t_lower:
                 is_valid, error_msg = False, get_text(user_id, "err_tiktok")
         elif current_state == "waiting_for_insta":
-            if "instagram.com" not in text_lower:
+            if "instagram.com" not in t_lower:
                 is_valid, error_msg = False, get_text(user_id, "err_insta")
         
         if not is_valid and current_state:
@@ -516,4 +670,3 @@ def handle_link(message):
     bot.send_message(chat_id, f"📥 {len(links)} adet bağlantı alındı!\n\n" + get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
 
 bot.infinity_polling()
-
