@@ -10,6 +10,7 @@ TOKEN = "8927197392:AAGsATpv90EwcijG2ppvRJJ5QRiz15S_hZc"
 bot = telebot.TeleBot(TOKEN)
 ADMIN_ID = 8520025523
 
+user_states = {}
 unlocked_platforms = {} 
 user_languages = {} 
 pending_links = {}  
@@ -37,7 +38,7 @@ ALL_LANGUAGES = [
 TRANSLATIONS = {
     "tr": {
         "welcome": (
-            "✨🚀 **Zenith v2.5.0.4 Zirvesine Hoş Geldin Reisim!** 🔥💎\n\n"
+            "✨🚀 **Zenith v2.5.0.5 Zirvesine Hoş Geldin Reisim!** 🔥💎\n\n"
             "*Botun motorları son sürat çalışıyor, indirmeye hazır ol!* 👇🤖\n\n"
             "⚠️ **ÖNEMLİ DUYURU & KURALLAR:**\n"
             "Lütfen bot içinde veya bağlı gruplarda **küfür ve hakaret etmeyiniz**. "
@@ -46,7 +47,7 @@ TRANSLATIONS = {
             "(1 saat ile 10 gün arası) engellenirsiniz!\n\n"
             "Anlayışınız için teşekkür ederiz... 🙏✨"
         ),
-        "admin_active": "\n\n👑 *Zenith v2.5.0.4 Admin Paneli Aktif!*",
+        "admin_active": "\n\n👑 *Zenith v2.5.0.5 Admin Paneli Aktif!*",
         "btn_uzun": "🎬 YouTube Uzun",
         "btn_shorts": "📱 YouTube Shorts",
         "btn_tiktok": "🎵 TikTok İndir",
@@ -56,6 +57,7 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Dil Seç / Language",
         "lang_select": "🌐 **Lütfen kullanmak istediğin dili seç:**",
         "back_menu": "🔙 Ana Menüye Dön",
+        "admin_prompt": "👑 **Zenith Admin Özel:** Lütfen geçerli bir **{p_key}** bağlantısı gönder:",
         "payment_success": "🎉 Ödeme başarılı! İndirme hakkın tanımlandı.",
         "fast_payment_success": "⚡ Hızlı indirme açıldı!",
         "no_rights": "⚠️ Bu platform için aktif hak veya süren bulunmuyor.",
@@ -65,11 +67,11 @@ TRANSLATIONS = {
         "btn_audio": "🎵 MP3 İndir",
         "success_video": "✅ Videon hazır dostum!😀",
         "success_audio": "🎵 Ses dosyan hazır!",
-        "start_fallback": "Lütfen bir video linki gönder veya `/start` yaz.",
-        "maintenance_msg": "🛠 **Zenith v2.5.0.4 şu an bakımda reisim!** En kısa sürede döneceğiz."
+        "start_fallback": "Lütfen `/start` yazıp menüden seçim yap veya platform butonuna bas.",
+        "maintenance_msg": "🛠 **Zenith v2.5.0.5 şu an bakımda reisim!** En kısa sürede döneceğiz."
     },
     "ku": {
-        "welcome": "✨🚀 **Bi xêr hatî Qraliyeta Zenith v2.5.0.4!** 🔥💎",
+        "welcome": "✨🚀 **Bi xêr hatî Qraliyeta Zenith v2.5.0.5!** 🔥💎",
         "admin_active": "\n\n👑 *Panela Admin Çalak e!*",
         "btn_uzun": "🎬 Vîdyoya Dirêj a YouTube",
         "btn_shorts": "📱 YouTube Shorts",
@@ -80,6 +82,7 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Ziman / Dil",
         "lang_select": "🌐 **Ji kerema xwe zimanê xwe hilbijêre:**",
         "back_menu": "🔙 Vegere Menuya Sereke",
+        "admin_prompt": "👑 **Taybet a Admin:** Lînka **{p_key}** bişîne:",
         "payment_success": "🎉 Dravdan serketî bû!",
         "fast_payment_success": "⚡ Daxistina lezgîn çalak bû!",
         "no_rights": "⚠️ Mafê te yê vê platformê nîne.",
@@ -89,11 +92,11 @@ TRANSLATIONS = {
         "btn_audio": "🎵 Pelê deng Daxîne",
         "success_video": "✅ Vîdyo amade ye!",
         "success_audio": "🎵 Pelê deng amade ye!",
-        "start_fallback": "Lînkek bişîne ango `/start` binivîse.",
+        "start_fallback": "Ji kerema xwe `/start` binivîse.",
         "maintenance_msg": "🛠️ **Zenith niha di dema bakûr de ye!**"
     },
     "en": {
-        "welcome": "✨🚀 **Welcome to Zenith v2.5.0.4!** 🔥💎",
+        "welcome": "✨🚀 **Welcome to Zenith v2.5.0.5!** 🔥💎",
         "admin_active": "\n\n👑 *Admin Panel Active!*",
         "btn_uzun": "🎬 YouTube Long Video",
         "btn_shorts": "📱 YouTube Shorts",
@@ -104,6 +107,7 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Language",
         "lang_select": "🌐 **Please select your language:**",
         "back_menu": "🔙 Back to Main Menu",
+        "admin_prompt": "👑 **Admin Special:** Send valid **{p_key}** links:",
         "payment_success": "🎉 Payment successful!",
         "fast_payment_success": "⚡ Fast download activated!",
         "no_rights": "⚠ You don't have rights for this platform.",
@@ -113,11 +117,11 @@ TRANSLATIONS = {
         "btn_audio": "🎵 Download MP3",
         "success_video": "✅ Video ready!",
         "success_audio": "🎵 Audio file is ready!",
-        "start_fallback": "Please send a link or type `/start`.",
+        "start_fallback": "Please type `/start`.",
         "maintenance_msg": "🛠️ Zenith is currently under maintenance."
     },
     "ar": {
-        "welcome": "✨🚀 **مرحباً بك في Zenith v2.5.0.4!** 🔥💎",
+        "welcome": "✨🚀 **مرحباً بك في Zenith v2.5.0.5!** 🔥💎",
         "admin_active": "\n\n👑 *لوحة المشرف نشطة!*",
         "btn_uzun": "🎬 فيديو يوتيوب طويل",
         "btn_shorts": "📱 يوتيوب شورتس",
@@ -128,6 +132,7 @@ TRANSLATIONS = {
         "btn_lang": "🌐 اللغة",
         "lang_select": "🌐 **يرجى اختيار لغتك:**",
         "back_menu": "🔙 العودة للقائمة الرئيسية",
+        "admin_prompt": "👑 **خاص للمشرف:** أرسل الروابط:",
         "payment_success": "🎉 نجح الدفع!",
         "fast_payment_success": "⚡ تم تفعيل التنزيل السريع!",
         "no_rights": "⚠️ ليس لديك حقوق نشطة.",
@@ -137,11 +142,11 @@ TRANSLATIONS = {
         "btn_audio": "🎵 تنزيل MP3",
         "success_video": "✅ الفيديو جاهز!",
         "success_audio": "🎵 الملف الصوتي جاهز!",
-        "start_fallback": "أرسل رابطاً أو اكتب `/start`.",
+        "start_fallback": "يرجى كتابة `/start`.",
         "maintenance_msg": "🛠️ Zenith تحت الصيانة حالياً."
     },
     "tk": {
-        "welcome": "✨🚀 **Zenith v2.5.0.4 Hoş geldiňiz!** 🔥💎",
+        "welcome": "✨🚀 **Zenith v2.5.0.5 Hoş geldiňiz!** 🔥💎",
         "admin_active": "\n\n👑 *Admin paneli işjeň!*",
         "btn_uzun": "🎬 YouTube Uzyn Wideo",
         "btn_shorts": "📱 YouTube Shorts",
@@ -152,6 +157,7 @@ TRANSLATIONS = {
         "btn_lang": "🌐 Dil",
         "lang_select": "🌐 **Dil saýlaň:**",
         "back_menu": "🔙 Yzyna",
+        "admin_prompt": "👑 **Admin:** Salgylary ibăriň:",
         "payment_success": "🎉 Töleg üstünlikli!",
         "fast_payment_success": "⚡ Çalt ýükleme işjeňleşdirildi!",
         "no_rights": "⚠ Ygtyýaryňyz ýok.",
@@ -161,7 +167,7 @@ TRANSLATIONS = {
         "btn_audio": "🎵 MP3",
         "success_video": "✅ Wideo taýýar!",
         "success_audio": "🎵 Ses taýýar!",
-        "start_fallback": "Salgy ibăriň ýa-da `/start` ýazyň.",
+        "start_fallback": "`/start` ýazyň.",
         "maintenance_msg": "🛠 Zenith tehniki hyzmatda."
     }
 }
@@ -242,7 +248,7 @@ def send_welcome(message):
     if is_maintenance_mode and user_id != ADMIN_ID:
         bot.send_message(chat_id, get_text(user_id, "maintenance_msg"), parse_mode="Markdown")
         return
-    
+    user_states[user_id] = None
     now_tr = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
     current_hour, current_minute = now_tr.hour, now_tr.minute
     
@@ -345,6 +351,7 @@ def callback_handler(call):
 
     if data == "back_to_main":
         bot.answer_callback_query(call.id)
+        user_states[user_id] = None
         txt = get_text(user_id, "welcome")
         if user_id == ADMIN_ID: txt += get_text(user_id, "admin_active")
         bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=txt, reply_markup=get_main_keyboard(user_id), parse_mode="Markdown")
@@ -353,9 +360,7 @@ def callback_handler(call):
     if data in ["dl_video", "dl_audio"]:
         bot.answer_callback_query(call.id)
         link_data = pending_links.get(user_id)
-        if not link_data:
-            bot.send_message(chat_id, "⚠️ Bağlantı süresi dolmuş veya bulunamadı, lütfen linki tekrar gönder.")
-            return
+        if not link_data: return
         links = link_data["links"]
         is_audio = (data == "dl_audio")
         
@@ -371,6 +376,13 @@ def callback_handler(call):
             except:
                 if os.path.exists(output): os.remove(output)
         pending_links.pop(user_id, None)
+        return
+
+    if user_id == ADMIN_ID and data.startswith("unlock_"):
+        p_key = data.replace("unlock_", "").replace("yt_", "")
+        user_states[user_id] = f"waiting_for_{p_key}"
+        bot.answer_callback_query(call.id, f"Admin: {p_key}")
+        bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=get_text(user_id, "admin_prompt").format(p_key=p_key), parse_mode="Markdown")
         return
 
     payloads = {"unlock_yt_uzun": "uzun", "unlock_yt_shorts": "shorts", "unlock_tiktok": "tiktok", "unlock_insta": "insta"}
@@ -420,6 +432,30 @@ def handle_link_and_security(message):
         bot.send_message(chat_id, f"🚫 Küfür tespit edildi! VIP hakların silindi ve {int(ban_sec/3600)} saat engellendin.")
         return
 
+    current_state = user_states.get(user_id)
+    if current_state and current_state.startswith("waiting_for_"):
+        target_platform = current_state.replace("waiting_for_", "")
+        user_states[user_id] = None
+        if not raw_text.startswith("http"):
+            bot.reply_to(message, "⚠️ Lütfen geçerli bir bağlantı gönder.")
+            return
+        
+        if target_platform == "tiktok" and "tiktok.com" not in raw_text.lower():
+            bot.reply_to(message, "❌ Bu özellik yalnızca TikTok bağlantıları için geçerlidir!")
+            return
+        elif target_platform == "insta" and "instagram.com" not in raw_text.lower():
+            bot.reply_to(message, "❌ Bu özellik yalnızca Instagram bağlantıları için geçerlidir!")
+            return
+        elif target_platform in ["uzun", "shorts"] and "youtube.com" not in raw_text.lower() and "youtu.be" not in raw_text.lower():
+            bot.reply_to(message, "❌ Bu özellik yalnızca YouTube bağlantıları için geçerlidir!")
+            return
+
+        pending_links[user_id] = {"links": [raw_text]}
+        m = InlineKeyboardMarkup(row_width=2)
+        m.add(InlineKeyboardButton(get_text(user_id, "btn_video"), callback_data="dl_video"), InlineKeyboardButton(get_text(user_id, "btn_audio"), callback_data="dl_audio"))
+        bot.send_message(chat_id, f"📥 1 bağlantı alındı, format seç:", reply_markup=m)
+        return
+
     links = [l.strip() for l in raw_text.splitlines() if l.strip().startswith("http")]
     if not links:
         bot.reply_to(message, get_text(user_id, "start_fallback"))
@@ -430,4 +466,4 @@ def handle_link_and_security(message):
     m.add(InlineKeyboardButton(get_text(user_id, "btn_video"), callback_data="dl_video"), InlineKeyboardButton(get_text(user_id, "btn_audio"), callback_data="dl_audio"))
     bot.send_message(chat_id, f"📥 {len(links)} bağlantı alındı, format seç:", reply_markup=m)
 
-bot.infinity_polling(skip_pending=True
+bot.infinity_polling(skip_pending=True)
