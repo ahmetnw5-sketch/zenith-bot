@@ -515,4 +515,5 @@ def handle_link(message):
     )
     bot.send_message(chat_id, f"📥 {len(links)} adet bağlantı alındı!\n\n" + get_text(user_id, "choose_format"), reply_markup=format_markup, parse_mode="Markdown")
 
-bot.infinity_polling(skip_pending=True, none_stop
+bot.infinity_polling()
+
